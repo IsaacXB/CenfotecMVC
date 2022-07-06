@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCenfoMusica.Web", "AppCenfoMusica.Web\AppCenfoMusica.Web.csproj", "{DBFFC795-548D-44E7-BE41-51CA6983244D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCenfoMusica.DTO", "AppCenfoMusica.DTO\AppCenfoMusica.DTO.csproj", "{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBFFC795-548D-44E7-BE41-51CA6983244D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBFFC795-548D-44E7-BE41-51CA6983244D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBFFC795-548D-44E7-BE41-51CA6983244D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBFFC795-548D-44E7-BE41-51CA6983244D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A26975E-0CC9-438A-A9CD-F62843A3962B}
+	EndGlobalSection
+EndGlobal
