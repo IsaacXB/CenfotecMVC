@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AppCenfoMusica.DTO
 {
-    internal class BaseDTO
+    public class BaseDTO
     {
+        public int Id { get; set; }
     }
 }
