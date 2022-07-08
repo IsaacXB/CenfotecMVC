@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace AppCenfoMusica.DTO
 {
-    public class BaseDTO
+    public class RespuestaDTO
     {
-        public int IdEntidad { get; set; }
-        public string? Mensaje { get; set; }
+        public int Codigo { get; set; }
+
+        public object? Contenido { get; set; }   
+
     }
 }

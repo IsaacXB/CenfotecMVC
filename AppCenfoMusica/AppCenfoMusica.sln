@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCenfoMusica.Web", "AppCenfoMusica.Web\AppCenfoMusica.Web.csproj", "{DBFFC795-548D-44E7-BE41-51CA6983244D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppCenfoMusica.Web", "AppCenfoMusica.Web\AppCenfoMusica.Web.csproj", "{DBFFC795-548D-44E7-BE41-51CA6983244D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCenfoMusica.DTO", "AppCenfoMusica.DTO\AppCenfoMusica.DTO.csproj", "{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppCenfoMusica.DTO", "AppCenfoMusica.DTO\AppCenfoMusica.DTO.csproj", "{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCenfoMusica.Datos", "AppCenfoMusica.Datos\AppCenfoMusica.Datos.csproj", "{DC7C34D0-B612-408F-B8B6-A762FEB9DA76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CAB7CDB-4AD4-4B7A-A5A9-1C5FA9D34555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC7C34D0-B612-408F-B8B6-A762FEB9DA76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC7C34D0-B612-408F-B8B6-A762FEB9DA76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC7C34D0-B612-408F-B8B6-A762FEB9DA76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC7C34D0-B612-408F-B8B6-A762FEB9DA76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
