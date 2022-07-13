@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AppCenfoMusica.DTO
 {
-    public class PoductoDTO : BaseDTO
+    public class ProductoDTO : BaseDTO
     {
         [Required (ErrorMessage = "El Nombre del Producto es un campo requerido.")]
         [Display (Name = "Nombre del Producto:") ]
