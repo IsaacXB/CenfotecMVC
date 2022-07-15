@@ -262,6 +262,183 @@ namespace AppCenfoMusica.Datos
                 };
             }
         }
+
+        public RespuestaDTO AgregarProducto(RespuestaDTO producto)
+        {
+            try
+            {
+                if (producto.Contenido == null) throw new Exception("No se logró realizar el guardado de datos solicitado.");
+
+                contexto.Productos.Add((Producto)producto.Contenido);
+
+                if (contexto.SaveChanges() > 0)
+                {
+                    return new RespuestaDTO { Codigo = 1, Contenido = producto };
+                }
+                else
+                {
+                    throw new Exception("No se logró realizar el guardado de datos solicitado.");
+                }
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+        }
+        #endregion
+
+        #region Actualizaciones 
+
+        public RespuestaDTO ActualizarPrecioProducto(int codigoProducto, decimal precioProducto)
+        {
+            try
+            {
+                var producto = contexto.Productos.FirstOrDefault(x => x.Pkproducto ==  codigoProducto);
+
+                if (producto != null)
+                {
+                    producto.MtoPrecio = precioProducto;
+
+                    if (contexto.SaveChanges() > 0)
+                    {
+                        return new RespuestaDTO { Codigo = 1, Contenido = producto };
+                    }
+                }
+                throw new Exception("No se pudo actualizar el producto especificado.");
+           
+            }
+            catch (Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+
+        }
+
+        public RespuestaDTO ActualizarPrecioProductoAlterno(int codigoProducto, decimal precioProducto)
+        {
+            try
+            {
+                var respuesta = BuscarProductoPorIdDTOValidacion(codigoProducto);
+
+                if (respuesta == null || respuesta.Contenido == null) throw new Exception("No se pudo actualizar el producto especificado.");
+
+                if (respuesta.Codigo > 0 && respuesta.Contenido.GetType() != typeof(ErrorDTO))
+                {
+                    ((Producto)respuesta.Contenido).MtoPrecio = precioProducto;
+
+                    if (contexto.SaveChanges() > 0)
+                    {
+                        return new RespuestaDTO { Codigo = 1, Contenido = producto };
+                    }
+                }
+                throw new Exception("No se pudo actualizar el producto especificado.");
+
+            }
+            catch (Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+
+        }
+
+        public RespuestaDTO ActualizarCantidadProductoSegunRangoPreciosTipo(decimal precioInicial, decimal precioFinal, int tipo)
+        {
+            try
+            {
+                var productos = contexto.Productos.Where(P => (P.MtoPrecio >= precioInicial && P.MtoPrecio <= precioFinal) && P.TipProducto == tipo).ToList();
+
+                if (productos.Count > 0)
+                {
+                    //contexto.RemoveRange(productos);
+
+                    foreach (var item in productos)
+                    {
+                        item.CantProducto = 100;
+                        //contexto.Productos.Remove(item);
+                    }
+
+                    if (contexto.SaveChanges() == productos.Count())
+                    {
+                        return new RespuestaDTO
+                        {
+                            Codigo = 1,
+                            Contenido = productos // Dentro de este objeto, que se retorna posterior al SaveChanges, ya se tiene actualizado el valor del PK
+                        };
+                    }
+                }
+
+                throw new Exception("No se encontraron productos con los parámetros establecidos");
+            }
+            catch (Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                };
+            }
+        }
+        #endregion
+
+        #region Eliminacion
+
+        public RespuestaDTO EliminarProducto(int idProducto)
+        {
+            try
+            {
+                var respuesta = BuscarProductoPorIdDTOValidacion(idProducto);
+
+                if (respuesta == null || respuesta.Contenido == null) throw new Exception("No se pudo actualizar el producto especificado.");
+
+
+                if (respuesta.Contenido.GetType() != typeof(ErrorDTO))
+                {
+                    contexto.Productos.Remove(((Producto)respuesta.Contenido));
+                    //producto.MtoPrecio = precioProducto;
+
+                    if (contexto.SaveChanges() > 0)
+                    {
+                        return new RespuestaDTO
+                        {
+                            Codigo = 1,
+                            Contenido = ((Producto)respuesta.Contenido) // Dentro de este objeto, que se retorna posterior al SaveChanges, ya se tiene actualizado el valor del PK
+                        };
+                    }
+                }
+
+                throw new Exception("No se pudo actualizar el producto especificado");
+            }
+            catch (Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                };
+            }
+        }
+
         #endregion
 
         #endregion
