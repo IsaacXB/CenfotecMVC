@@ -441,6 +441,134 @@ namespace AppCenfoMusica.Datos
 
         #endregion
 
+        #region Filtrado
+
+        // Filtro por parámetros solidos
+        public RespuestaDTO FiltradoProductosParametrosSolidos(string nombre, decimal montoInicial, decimal montoFinal, int tipo, int cantidadInicial, int cantidadFinal)
+        {
+            try
+            {
+                List<Producto> datosEncontrados = new List<Producto>();
+                if (nombre != null)
+                {
+                    datosEncontrados = contexto.Productos.Where(p => p.NomProducto.Contains(nombre)).ToList();
+                }
+                if (montoFinal > 0)
+                {
+                    if (datosEncontrados.Count > 0)
+                    {
+                        datosEncontrados = datosEncontrados.Where(p => p.MtoPrecio >= montoInicial && p.MtoPrecio <= montoFinal).ToList();
+                    }
+                    else
+                    {
+                        datosEncontrados = contexto.Productos.Where(p => p.MtoPrecio >= montoInicial && p.MtoPrecio <= montoFinal).ToList();
+                    }
+                }
+                if (tipo > 0)
+                {
+                    if (datosEncontrados.Count > 0)
+                    {
+                        datosEncontrados = datosEncontrados.Where(p => p.TipProducto == tipo).ToList();
+                    }
+                    else
+                    {
+                        datosEncontrados = contexto.Productos.Where(p => p.TipProducto == tipo).ToList();
+                    }
+                }
+                if (cantidadFinal > 0)
+                {
+                    if (datosEncontrados.Count > 0)
+                    {
+                        datosEncontrados = datosEncontrados.Where(p => p.MtoPrecio >= cantidadInicial && p.MtoPrecio <= cantidadFinal).ToList();
+                    }
+                    else
+                    {
+                        datosEncontrados = contexto.Productos.Where(p => p.MtoPrecio >= cantidadInicial && p.MtoPrecio <= cantidadFinal).ToList();
+                    }
+                }
+                if (datosEncontrados.Count > 1)
+                {
+                    return new RespuestaDTO { Codigo = 1, Contenido = datosEncontrados };
+                }
+                else
+                {
+                    throw new Exception("No se encontron productos para los parametros establecidos.");
+                }
+
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                };
+            }
+        }
+
+        //Filtro por parámetros anónimos
+
+        public RespuestaDTO FiltradoProductosParametrosAnonimos(List<Producto> datosEncontrados, string nombreParametro, object valorParametro)
+        {
+            try
+            {
+                if (datosEncontrados.Count > 0)
+                {
+                    switch (nombreParametro)
+                    {
+                        case "Nombre":
+                            datosEncontrados = datosEncontrados.Where(p => p.NomProducto.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "Montos":
+                            List<decimal> montos = (List<decimal>)valorParametro;
+                            datosEncontrados = datosEncontrados.Where(p => p.MtoPrecio >= montos.ElementAt(0) && p.MtoPrecio <= montos.ElementAt(1)).ToList();
+                            break;
+                        case "Tipo":
+                            datosEncontrados = datosEncontrados.Where(p => p.TipProducto == Convert.ToUInt32(valorParametro)).ToList();
+                            break;
+                        case "Cantidades":
+                            List<int> cantidades = (List<int>)valorParametro;
+                            datosEncontrados = datosEncontrados.Where(p => p.MtoPrecio >= cantidades.ElementAt(0) && p.MtoPrecio <= cantidades.ElementAt(1)).ToList();
+                            break;
+                        default:
+                            throw new Exception("Parámetro no establecido.");
+                    }
+                }
+                else
+                {
+                    switch (nombreParametro)
+                    {
+                        case "Nombre":
+                            datosEncontrados = contexto.Productos.Where(p => p.NomProducto.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "Montos":
+                            List<decimal> montos = (List<decimal>)valorParametro;
+                            datosEncontrados = contexto.Productos.Where(p => p.MtoPrecio >= montos.ElementAt(0) && p.MtoPrecio <= montos.ElementAt(1)).ToList();
+                            break;
+                        case "Tipo":
+                            datosEncontrados = contexto.Productos.Where(p => p.TipProducto == Convert.ToUInt32(valorParametro)).ToList();
+                            break;
+                        case "Cantidades":
+                            List<int> cantidades = (List<int>)valorParametro;
+                            datosEncontrados = contexto.Productos.Where(p => p.MtoPrecio >= cantidades.ElementAt(0) && p.MtoPrecio <= cantidades.ElementAt(1)).ToList();
+                            break;
+                        default:
+                            throw new Exception("Parámetro no establecido.");
+                    }
+                }
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                };
+            }
+
+        }
+        #endregion
+
         #endregion
 
     }
