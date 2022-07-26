@@ -17,7 +17,7 @@ namespace AppCenfoMusica.DTO
 
         [Display(Name = "Precio Unitario:")]
         [RegularExpression(@"^(\d*\.)?\d+$")]
-        public decimal PrecioUnitaro { get;set; }
+        public decimal PrecioUnitario { get;set; }
 
         [Display(Name = "Cantidad Bodega:")]
         [Range(0,10000)]

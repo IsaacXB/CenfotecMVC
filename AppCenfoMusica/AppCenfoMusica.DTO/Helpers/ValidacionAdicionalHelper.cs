@@ -113,7 +113,7 @@ namespace AppCenfoMusica.DTO.Helpers
             {
                 if (value == null) return false;
                 var fecha = value.ToString() == null ? string.Empty : value.ToString() ;
-                if (fecha == null ) return false
+                if (fecha == null) return false;
 
                 DateTime fechaEntrega =  DateTime.Parse(fecha);
                 DateTime fechaHoy = DateTime.Now;

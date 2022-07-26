@@ -167,13 +167,6 @@ namespace AppCenfoMusica.Datos
                 {
                     throw new Exception("No se logró realizar el guardado de datos solicitado.");
                 }
-
-
-                return new RespuestaDTO
-                {
-                    Codigo = 1,
-                    Contenido = vendedor
-                };
             }
             catch (Exception error)
             {
@@ -205,13 +198,6 @@ namespace AppCenfoMusica.Datos
                 {
                     throw new Exception("No se logró realizar el guardado de datos solicitado.");
                 }
-
-
-                return new RespuestaDTO
-                {
-                    Codigo = 1,
-                    Contenido = vendedor
-                };
             }
             catch (Exception error)
             {

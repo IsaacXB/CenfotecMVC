@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AppCenfoMusica.DTO;
 using AppCenfoMusica.Datos.CenfomusicaModel;
+using AppCenfoMusica.Datos.Helpers;
 
 namespace AppCenfoMusica.Datos
 {
@@ -104,7 +105,6 @@ namespace AppCenfoMusica.Datos
                     }
                 };
             }
-            return null;
 
         }
         public RespuestaDTO ListarProductos()
@@ -163,12 +163,6 @@ namespace AppCenfoMusica.Datos
                 {
                     throw new Exception("No se logró realizar el guardado de datos solicitado.");
                 }
-                
-
-                return new RespuestaDTO { 
-                    Codigo = 1, 
-                    Contenido = producto 
-                };
             }
             catch (Exception error)
             {
@@ -199,13 +193,6 @@ namespace AppCenfoMusica.Datos
                 {
                     throw new Exception("No se logró realizar el guardado de datos solicitado.");
                 }
-
-
-                return new RespuestaDTO
-                {
-                    Codigo = 1,
-                    Contenido = producto
-                };
             }
             catch (Exception error)
             {
@@ -227,7 +214,7 @@ namespace AppCenfoMusica.Datos
                 contexto.Productos.Add(new Producto { 
                     NomProducto = producto.Nombre,
                     CantProducto = producto.CantidadBodega,
-                    MtoPrecio = producto.PrecioUnitaro,
+                    MtoPrecio = producto.PrecioUnitario,
                     TipProducto = producto.TipoProducto
                 });
 
@@ -243,12 +230,6 @@ namespace AppCenfoMusica.Datos
                 {
                     throw new Exception("No se logró realizar el guardado de datos solicitado.");
                 }
-
-                return new RespuestaDTO
-                {
-                    Codigo = 1,
-                    Contenido = producto
-                };
             }
             catch (Exception error)
             {
@@ -342,7 +323,7 @@ namespace AppCenfoMusica.Datos
 
                     if (contexto.SaveChanges() > 0)
                     {
-                        return new RespuestaDTO { Codigo = 1, Contenido = producto };
+                        return new RespuestaDTO { Codigo = 1, Contenido = (Producto)respuesta.Contenido };
                     }
                 }
                 throw new Exception("No se pudo actualizar el producto especificado.");
@@ -360,6 +341,34 @@ namespace AppCenfoMusica.Datos
                 };
             }
 
+        }
+
+        public RespuestaDTO ActualizarPrecioProducto(RespuestaDTO productoActualizar) // EL PRODUCTO A ACTUALIZAR DEBE VENIR CON SU PRIMARY KEY
+        {
+            try
+            {
+
+                var productoDatos = (Producto)productoActualizar.Contenido;
+
+                if (contexto.SaveChanges() > 0)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = productoDatos // Dentro de este objeto, que se retorna posterior al SaveChanges, ya se tiene actualizado el valor del PK
+                    };
+                }
+
+                throw new Exception("No se pudo actualizar el producto especificado");
+            }
+            catch (Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                };
+            }
         }
 
         public RespuestaDTO ActualizarCantidadProductoSegunRangoPreciosTipo(decimal precioInicial, decimal precioFinal, int tipo)
@@ -422,7 +431,7 @@ namespace AppCenfoMusica.Datos
                         return new RespuestaDTO
                         {
                             Codigo = 1,
-                            Contenido = ((Producto)respuesta.Contenido) // Dentro de este objeto, que se retorna posterior al SaveChanges, ya se tiene actualizado el valor del PK
+                            Contenido = new BaseDTO { Mensaje = "El producto se elimino satisfacoriamente"}
                         };
                     }
                 }
@@ -431,11 +440,13 @@ namespace AppCenfoMusica.Datos
             }
             catch (Exception error)
             {
-                return new RespuestaDTO
-                {
-                    Codigo = -1,
-                    Contenido = new ErrorDTO { MensajeError = error.Message }
-                };
+                //return new RespuestaDTO
+                //{
+                //    Codigo = -1,
+                //    Contenido = new ErrorDTO { MensajeError = error.Message }
+                //};
+                //}; 
+                return ControladorRetornos.ControladorErrores(error);
             }
         }
 
@@ -556,6 +567,11 @@ namespace AppCenfoMusica.Datos
                             throw new Exception("Parámetro no establecido.");
                     }
                 }
+                return new RespuestaDTO
+                {
+                    Codigo = 1,
+                    Contenido = datosEncontrados
+                };
             }
             catch (System.Exception error)
             {
