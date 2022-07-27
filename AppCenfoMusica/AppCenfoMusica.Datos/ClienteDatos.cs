@@ -352,18 +352,32 @@ namespace AppCenfoMusica.Datos
         #endregion
 
         #region Actualizaciones
-
-        public RespuestaDTO ActualizarCliente(RespuestaDTO clienteActualizar)
+        public RespuestaDTO ActualizarCliente(int idcliente,string nombre, string email, string nomUsuario, string contrasena, string cedula, 
+            int estado, int sexo, DateTime? fechaNacimiento, string telefono)
         {
             try
-            {   var clienteDatos = (Cliente)clienteActualizar.Contenido;
+            {
+                var cliente = contexto.Clientes.FirstOrDefault(x => x.Pkcliente == idcliente);
+
+                if (cliente != null)
+                {
+                    cliente.NomCliente = !string.IsNullOrEmpty(nombre) ? nombre : cliente.NomCliente;
+                    cliente.EmlCorreo = !string.IsNullOrEmpty(email) ? email :cliente.EmlCorreo;
+                    cliente.NomUsuario = !string.IsNullOrEmpty(nomUsuario) ? nomUsuario : cliente.NomUsuario;
+                    cliente.IndContrasena = !string.IsNullOrEmpty(contrasena) ? contrasena : cliente.IndContrasena;
+                    cliente.IdCedula = !string.IsNullOrEmpty(cedula)?cedula : cliente.IdCedula;
+                    cliente.IndEstado = estado > 0? estado : cliente.IndEstado;
+                    cliente.IndSexo = sexo > 0 ? sexo : cliente.IndSexo;
+                    cliente.FecNacimiento = fechaNacimiento != null ? fechaNacimiento : cliente.FecNacimiento;
+                    cliente.TelCliente = !string.IsNullOrEmpty(telefono) ? telefono :cliente.TelCliente;
+                }
 
                 if (contexto.SaveChanges() > 0)
                 {
                     return new RespuestaDTO
                     {
                         Codigo = 1,
-                        Contenido = clienteDatos
+                        Contenido = cliente
                     };
                 }
 
@@ -374,10 +388,15 @@ namespace AppCenfoMusica.Datos
                 return new RespuestaDTO
                 {
                     Codigo = -1,
-                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
                 };
             }
         }
+
+
         #endregion
 
         #region Eliminaciones

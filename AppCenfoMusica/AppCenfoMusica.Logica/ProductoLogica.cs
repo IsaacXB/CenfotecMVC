@@ -281,6 +281,34 @@ namespace AppCenfoMusica.Logica
 
         #endregion
 
+        #region Filtrado
+
+        public List<BaseDTO> FiltradoProductoParametrosSolidos(string nombre, decimal montoInicial, decimal montoFinal, int tipo, int cantidadInicial, int cantidadFinal)
+        {
+            List<BaseDTO> respuesta = new List<BaseDTO>();
+            try
+            {
+                ProductoDatos intermedio = new ProductoDatos(contexto);
+
+                var resultado = intermedio.FiltradoProductosParametrosSolidos(nombre, montoInicial, montoFinal, tipo, cantidadInicial, cantidadFinal);
+
+                if (resultado.Codigo > 0)
+                {
+                    //TODO
+                }
+            }
+            catch (System.Exception error)
+            {
+                respuesta.Clear();
+                var errorCatch = new ErrorDTO { CodigoError = -1, MensajeError = error.Message };
+                respuesta.Add(errorCatch);
+                return respuesta;
+            }
+            return respuesta;
+        }
+
+        #endregion
+
         #endregion
     }
 }
