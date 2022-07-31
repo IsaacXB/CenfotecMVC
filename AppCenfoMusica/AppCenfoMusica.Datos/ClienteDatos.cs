@@ -140,6 +140,37 @@ namespace AppCenfoMusica.Datos
                 };
             }
         }
+
+        public RespuestaDTO ListarClientes()
+        {
+            try
+            {
+                var clientes = contexto.Clientes.ToList();
+                if (clientes.Count > 0)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = clientes
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se encontraron clientes en este momento con ese estado.");
+                }
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+        }
         public RespuestaDTO ListarClientesPorEstado(int estado)
         {
             try
