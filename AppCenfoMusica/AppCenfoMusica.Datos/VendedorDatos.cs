@@ -1,4 +1,5 @@
 ﻿using AppCenfoMusica.Datos.CenfomusicaModel;
+using AppCenfoMusica.Datos.Helpers;
 using AppCenfoMusica.DTO;
 using System;
 using System.Collections.Generic;
@@ -357,6 +358,46 @@ namespace AppCenfoMusica.Datos
             }
 
         }
+
+        public RespuestaDTO ActualizarVendedor(int idvendedor, string nombre, int puesto, string nomUsuario, string contrasena, string cedula, int estado)
+        {
+            try
+            {
+                var vendedor = contexto.Vendedors.FirstOrDefault(x => x.Pkvendedor == idvendedor);
+
+                if (vendedor != null)
+                {
+                    vendedor.NomVendedor = !string.IsNullOrEmpty(nombre) ? nombre : vendedor.NomVendedor;
+                    vendedor.IndPuesto = puesto > 0 ? puesto : vendedor.IndPuesto;
+                    vendedor.NomUsuario = !string.IsNullOrEmpty(nomUsuario) ? nomUsuario : vendedor.NomUsuario;
+                    vendedor.IndContrasena = !string.IsNullOrEmpty(contrasena) ? contrasena : vendedor.IndContrasena;
+                    vendedor.IndCedula = !string.IsNullOrEmpty(cedula) ? cedula : vendedor.IndCedula;
+                    vendedor.IndEstado = estado > 0 ? estado : vendedor.IndEstado;
+                }
+
+                if (contexto.SaveChanges() > 0)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = vendedor
+                    };
+                }
+
+                throw new Exception("No se pudo actualizar el cliente especificado");
+            }
+            catch (Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+        }
         #endregion
 
         #region Eliminacion
@@ -380,6 +421,183 @@ namespace AppCenfoMusica.Datos
             }
         }
 
+        public RespuestaDTO EliminarVendedor(int idVendedor)
+        {
+            try
+            {
+                var respuesta = BuscarVendedorPorIdDTOValidacion(idVendedor);
+
+                if (respuesta == null || respuesta.Contenido == null) throw new Exception("No se pudo actualizar el vendedor especificado.");
+
+
+                if (respuesta.Contenido.GetType() != typeof(ErrorDTO))
+                {
+                    contexto.Vendedors.Remove(((Vendedor)respuesta.Contenido));
+
+                    if (contexto.SaveChanges() > 0)
+                    {
+                        return new RespuestaDTO
+                        {
+                            Codigo = 1,
+                            Contenido = new BaseDTO { Mensaje = "El cliente se elimino satisfacoriamente" }
+                        };
+                    }
+                }
+
+                throw new Exception("No se pudo actualizar el cliente especificado");
+            }
+            catch (Exception error)
+            {
+                return ControladorRetornos.ControladorErrores(error);
+            }
+        }
+
+        #endregion
+
+        #region Filtrado
+
+        // Filtro por parámetros solidos
+        public RespuestaDTO FiltradoVendedoresParametrosSolidos( string nombre, int puesto, string nomUsuario, string cedula, int estado)
+        {
+            try
+            {
+                List<Vendedor> datosEncontrados = new List<Vendedor>();
+                if (nombre != null)
+                {
+                    datosEncontrados = contexto.Vendedors.Where(p => p.NomVendedor.Contains(nombre)).ToList();
+                }
+                if (puesto > 0)
+                {
+                    if (datosEncontrados.Count > 0)
+                    {
+                        datosEncontrados = datosEncontrados.Where(p => p.IndPuesto == puesto).ToList();
+                    }
+                    else
+                    {
+                        datosEncontrados = contexto.Vendedors.Where(p => p.IndPuesto == puesto).ToList();
+                    }
+                }
+                if (!string.IsNullOrEmpty(nomUsuario))
+                {
+                    if (datosEncontrados.Count > 0)
+                    {
+                        datosEncontrados = datosEncontrados.Where(p => p.NomUsuario == nomUsuario).ToList();
+                    }
+                    else
+                    {
+                        datosEncontrados = contexto.Vendedors.Where(p => p.NomUsuario == nomUsuario).ToList();
+                    }
+                }
+                if (!string.IsNullOrEmpty(cedula))
+                {
+                    if (datosEncontrados.Count > 0)
+                    {
+                        datosEncontrados = datosEncontrados.Where(p => p.IndCedula == cedula).ToList();
+                    }
+                    else
+                    {
+                        datosEncontrados = contexto.Vendedors.Where(p => p.IndCedula == cedula).ToList();
+                    }
+                }
+                if (estado > 0)
+                {
+                    if (datosEncontrados.Count > 0)
+                    {
+                        datosEncontrados = datosEncontrados.Where(p => p.IndEstado == estado).ToList();
+                    }
+                    else
+                    {
+                        datosEncontrados = contexto.Vendedors.Where(p => p.IndEstado == estado).ToList();
+                    }
+                }
+                if (datosEncontrados.Count > 1)
+                {
+                    return new RespuestaDTO { Codigo = 1, Contenido = datosEncontrados };
+                }
+                else
+                {
+                    throw new Exception("No se encontron productos para los parametros establecidos.");
+                }
+
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                };
+            }
+        }
+
+        //Filtro por parámetros anónimos
+
+        public RespuestaDTO FiltradoVendedoresParametrosAnonimos(List<Vendedor> datosEncontrados, string nombreParametro, object valorParametro)
+        {
+            try
+            {
+                if (datosEncontrados.Count > 0)
+                {
+                    switch (nombreParametro)
+                    {
+                        case "nombre":
+                            datosEncontrados = datosEncontrados.Where(p => p.NomVendedor.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "puesto":
+                            datosEncontrados = datosEncontrados.Where(p => p.IndPuesto.Equals(valorParametro)).ToList();
+                            break;
+                        case "nomUsuario":
+                            datosEncontrados = datosEncontrados.Where(p => p.NomUsuario.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "cedula":
+                            datosEncontrados = datosEncontrados.Where(p => p.IndCedula.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "estado":
+                            datosEncontrados = datosEncontrados.Where(p => p.IndEstado == Convert.ToUInt32(valorParametro)).ToList();
+                            break;
+                        default:
+                            throw new Exception("Parámetro no establecido.");
+                    }
+                }
+                else
+                {
+                    switch (nombreParametro)
+                    {
+                        case "nombre":
+                            datosEncontrados = contexto.Vendedors.Where(p => p.NomVendedor.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "puesto":
+                            datosEncontrados = contexto.Vendedors.Where(p => p.IndPuesto.Equals(valorParametro)).ToList();
+                            break;
+                        case "nomUsuario":
+                            datosEncontrados = contexto.Vendedors.Where(p => p.NomUsuario.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "cedula":
+                            datosEncontrados = contexto.Vendedors.Where(p => p.IndCedula.Contains(valorParametro.ToString())).ToList();
+                            break;
+                        case "estado":
+                            datosEncontrados = contexto.Vendedors.Where(p => p.IndEstado == Convert.ToUInt32(valorParametro)).ToList();
+                            break;
+                        default:
+                            throw new Exception("Parámetro no establecido.");
+                    }
+                }
+                return new RespuestaDTO
+                {
+                    Codigo = 1,
+                    Contenido = datosEncontrados
+                };
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO { MensajeError = error.Message }
+                };
+            }
+
+        }
         #endregion
 
         #endregion

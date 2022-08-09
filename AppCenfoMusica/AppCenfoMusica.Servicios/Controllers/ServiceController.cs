@@ -9,6 +9,7 @@ namespace AppCenfoMusica.Servicios.Controllers
     [ApiController]
     public class ServiceController : ControllerBase
     {
+        #region Productos
         //Get: api/Service/ListaProductos
         [HttpGet("ListaProductos")]
         public IEnumerable<BaseDTO> ListaProductos()
@@ -41,7 +42,7 @@ namespace AppCenfoMusica.Servicios.Controllers
             }
         }
 
-        //Get: api/Service/AgregarProducto/{id}
+        //Get: api/Service/AgregarProducto/
         [HttpPost("AgregarProducto")]
         public BaseDTO AgregarProducto(ProductoDTO producto)
         {
@@ -71,5 +72,24 @@ namespace AppCenfoMusica.Servicios.Controllers
                 return (ErrorDTO)resultado;
             }
         }
+
+        [HttpPost("ActualizarPrecioProducto")]
+        public BaseDTO ActualizarPrecioProducto(ProductoDTO producto)
+        {
+            var resultado = new ProductoLogica().ActualizarPrecioProducto(producto.IdEntidad, producto.PrecioUnitario);
+
+            if (resultado.GetType() != typeof(ErrorDTO))
+            {
+                return (ProductoDTO)resultado;
+            }
+            else
+            {
+                return (ErrorDTO)resultado;
+            }
+        }
+        #endregion
+
+#region Cliente
+#endregion
     }
 }
