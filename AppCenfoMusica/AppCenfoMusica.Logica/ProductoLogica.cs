@@ -216,13 +216,13 @@ namespace AppCenfoMusica.Logica
             }
         }
 
-        public BaseDTO ActualizarPrecioProducto(ProductoDTO productoCliente)
+        public BaseDTO ActualizarPrecioProducto(ProductoDTO producto)
         {
             try
             {
                 ProductoDatos intermedio = new ProductoDatos(contexto);
 
-                var resultado = intermedio.ActualizarPrecioProducto(productoCliente.IdEntidad, productoCliente.PrecioUnitario);
+                var resultado = intermedio.ActualizarPrecioProducto(producto.IdEntidad, producto.PrecioUnitario);
 
                 if (resultado.Codigo > 0)
                 {
@@ -251,13 +251,13 @@ namespace AppCenfoMusica.Logica
 
         #region Eliminación
 
-        public BaseDTO EliminarProducto(ProductoDTO productoCliente)
+        public BaseDTO EliminarProducto(ProductoDTO producto)
         {
             try
             {
                 ProductoDatos intermedio = new ProductoDatos(contexto);
 
-                var resultado = intermedio.EliminarProducto(productoCliente.IdEntidad);
+                var resultado = intermedio.EliminarProducto(producto.IdEntidad);
 
                 if (resultado.Codigo > 0)
                 {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AppCenfoMusica.Datos.CenfomusicaModel;
 using AppCenfoMusica.Datos.Helpers;
 using AppCenfoMusica.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppCenfoMusica.Datos
 {
@@ -298,6 +299,86 @@ namespace AppCenfoMusica.Datos
                     }
                 };
             }
+        }
+        public RespuestaDTO BuscarSolicitudCompraConDetalle(int codigoSolicitud)
+        {
+            try
+            {
+                var solicitud = contexto.SolicitudCompras.Include(S => S.DetalleSolicitudCompras).FirstOrDefault(S => S.PksolicitudCompra == codigoSolicitud);
+
+                if (solicitud != null)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = solicitud
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se logró encontrar ningún producto con el código especificado");
+                }
+            }
+            catch (Exception error)
+            {
+                return ControladorRetornos.ControladorErrores(error);
+            }
+        }
+        public RespuestaDTO BuscarSolicitudCompraSinDetalle(int codigoSolicitud)
+        {
+            try
+            {
+                var solicitud = contexto.SolicitudCompras.FirstOrDefault(S => S.PksolicitudCompra == codigoSolicitud);
+
+                if (solicitud != null)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = solicitud
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se logró encontrar ningún producto con el código especificado");
+                }
+            }
+            catch (Exception error)
+            {
+                return ControladorRetornos.ControladorErrores(error);
+            }
+        }
+        public RespuestaDTO ComprasMayoresACiertaCantidad(decimal montoLimite)
+        {
+            try
+            {
+                //               1             2        3    4           4.2              4.3   4.4        
+                var ventas = contexto.SolicitudCompras.Where(S => S.DetalleSolicitudCompras.Sum(D => D.MtoLinea) >= montoLimite);
+
+                if (ventas.Count() > 0)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = ventas
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se logró encontrar ningún producto con el código especificado");
+                }
+            }
+            catch (Exception error)
+            {
+                return ControladorRetornos.ControladorErrores(error);
+            }
+        }
+        public object BuscarSolicitudCompraPorID(int id)
+        {
+            var solicitudCompra = contexto.SolicitudCompras.FirstOrDefault(P => P.PksolicitudCompra == id);
+
+            return solicitudCompra;
+
         }
         #endregion
 

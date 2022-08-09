@@ -44,7 +44,7 @@ namespace AppCenfoMusica.DTO
         [ValidacionEmailCenfotec(ErrorMessage = "El email no es valido debe tener el formato @ucenfotec.ac.cr.")]
         [RegularExpression(@"\w+@ucenfotec.ac.cr")]
         [EmailAddress]
-        public int MinutoRegistro { get; set; }
+        public string Email { get; set; }
 
         [Display(Name = "Teléfono:")]
         [Phone]

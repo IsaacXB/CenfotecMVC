@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppCenfoMusica.DTO", "AppCe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppCenfoMusica.Datos", "AppCenfoMusica.Datos\AppCenfoMusica.Datos.csproj", "{DC7C34D0-B612-408F-B8B6-A762FEB9DA76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCenfoMusica.Logica", "AppCenfoMusica.Logica\AppCenfoMusica.Logica.csproj", "{CA9A5C5C-BBB3-4862-BCFB-DCC72FDC61C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppCenfoMusica.Logica", "AppCenfoMusica.Logica\AppCenfoMusica.Logica.csproj", "{CA9A5C5C-BBB3-4862-BCFB-DCC72FDC61C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCenfoMusica.Servicios", "AppCenfoMusica.Servicios\AppCenfoMusica.Servicios.csproj", "{6B7F521C-C988-4241-93E7-69E5769058CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CA9A5C5C-BBB3-4862-BCFB-DCC72FDC61C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA9A5C5C-BBB3-4862-BCFB-DCC72FDC61C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA9A5C5C-BBB3-4862-BCFB-DCC72FDC61C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B7F521C-C988-4241-93E7-69E5769058CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B7F521C-C988-4241-93E7-69E5769058CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B7F521C-C988-4241-93E7-69E5769058CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B7F521C-C988-4241-93E7-69E5769058CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
