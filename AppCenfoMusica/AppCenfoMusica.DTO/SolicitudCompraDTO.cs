@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AppCenfoMusica.DTO
 {
-    public class SolicitudDeCompraDTO : BaseDTO
+    public class SolicitudCompraDTO : BaseDTO
     {
         [Required(ErrorMessage = "El Tipo de entrega es un campo requerido.")]
         [Display(Name = "Tipo de Entrega:")]

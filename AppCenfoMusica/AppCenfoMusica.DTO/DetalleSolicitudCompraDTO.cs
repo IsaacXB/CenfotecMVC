@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AppCenfoMusica.DTO
 {
-    public class DetalleSolicitudDTO
+    public class DetalleSolicitudCompraDTO :BaseDTO
     {
         [Required(ErrorMessage = "La cantidad de productos es requerida.")]
         [Display(Name = "Cantidad de Productos:")]

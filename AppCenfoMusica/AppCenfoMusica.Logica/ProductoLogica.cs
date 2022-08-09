@@ -216,13 +216,13 @@ namespace AppCenfoMusica.Logica
             }
         }
 
-        public BaseDTO ActualizarPrecioProducto(ProductoDTO producto)
+        public BaseDTO ActualizarPrecioProducto(ProductoDTO productoDTO)
         {
             try
             {
                 ProductoDatos intermedio = new ProductoDatos(contexto);
 
-                var resultado = intermedio.ActualizarPrecioProducto(producto.IdEntidad, producto.PrecioUnitario);
+                var resultado = intermedio.ActualizarPrecioProducto(productoDTO.IdEntidad, productoDTO.PrecioUnitario);
 
                 if (resultado.Codigo > 0)
                 {

@@ -96,6 +96,37 @@ namespace AppCenfoMusica.Datos
                 };
             }
         }
+
+        public RespuestaDTO ListarDetalleSolicitudSinEncabezado()
+        {
+            try
+            {
+                var detalleSolicitud = contexto.DetalleSolicitudCompras.ToList();
+                if (detalleSolicitud.Count > 0)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = detalleSolicitud
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se encontraron clientes en este momento con ese estado.");
+                }
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+        }
         #endregion
 
         #region Eliminaciones

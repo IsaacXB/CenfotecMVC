@@ -455,6 +455,45 @@ namespace AppCenfoMusica.Datos
             }
         }
 
+        public RespuestaDTO AgregarSolicitudCompraCompleta(SolicitudCompra solicitud, List<DetalleSolicitudCompra> detalles)
+        {
+            using (var transaccion = contexto.Database.BeginTransaction())
+            {
+                try
+                {
+                    contexto.SolicitudCompras.Add(solicitud);
+
+                    foreach (var item in detalles)
+                    {
+                        solicitud.DetalleSolicitudCompras.Add(item);
+                    }
+
+                    var totalInserts = 1 + detalles.Count;
+
+                    if (contexto.SaveChanges() == totalInserts)
+                    {
+                        transaccion.Commit();
+                        return new RespuestaDTO
+                        {
+                            Codigo = 1,
+                            Contenido = solicitud
+                        };
+                    }
+                    else
+                    {
+                        transaccion.Rollback();
+                        throw new Exception("No se logró realizar el guardado de datos solicitado");
+                    }
+
+                }
+                catch (Exception error)
+                {
+                    transaccion.Dispose();
+                    return ControladorRetornos.ControladorErrores(error);
+                }
+            }
+        }
+
         #endregion
 
         #region Actualizaciones
