@@ -294,7 +294,16 @@ namespace AppCenfoMusica.Logica
 
                 if (resultado.Codigo > 0)
                 {
-                    //TODO
+                    //Resultado positivo
+                    var productos = (List<Producto>)resultado.Contenido;
+
+                    foreach (var item in productos)
+                    {
+                        var itemConvertido = ConvertirEntidadProductoADTO(item);
+                        respuesta.Add(itemConvertido);
+                    }
+
+                    return respuesta;
                 }
             }
             catch (System.Exception error)

@@ -228,6 +228,41 @@ namespace AppCenfoMusica.Logica
                 return respuesta;
             }
         }
+
+        public List<BaseDTO> FiltrarSolicitudCompraConDetalles(List<DateTime> fechaEntrega, List<DateTime> fechaSolicitud, int tipoEntrega,
+    int codigoProducto, int codigoCliente, int codigoVendedor)
+        {
+            List<BaseDTO> respuesta = new List<BaseDTO>();
+            try
+            {
+                SolicitudCompraDatos intermedio = new SolicitudCompraDatos(contexto);
+
+                var resultado = intermedio.FiltrarSolicitudCompraConDetalles(fechaEntrega, fechaSolicitud, tipoEntrega, codigoProducto, codigoCliente, codigoVendedor);
+
+                if (resultado.Codigo > 0)
+                {
+                    //Resultado positivo
+                    var solicitudesCompra = (List<SolicitudCompra>)resultado.Contenido;
+
+                    foreach (var item in solicitudesCompra)
+                    {
+                        var itemConvertido = ConvertirEntidadSolicitudCompraDTO(item);
+                        respuesta.Add(itemConvertido);
+                    }
+
+                    return respuesta;
+                }
+            }
+            catch (System.Exception error)
+            {
+                respuesta.Clear();
+                var errorCatch = new ErrorDTO { CodigoError = -1, MensajeError = error.Message };
+                respuesta.Add(errorCatch);
+                return respuesta;
+            }
+            return respuesta;
+        }
+
         #endregion
 
 

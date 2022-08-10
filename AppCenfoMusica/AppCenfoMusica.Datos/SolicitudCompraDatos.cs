@@ -380,6 +380,7 @@ namespace AppCenfoMusica.Datos
             return solicitudCompra;
 
         }
+
         #endregion
 
         #region Inserciones
@@ -567,6 +568,60 @@ namespace AppCenfoMusica.Datos
             }
         }
 
+        public RespuestaDTO ActualizarSolicitudCompraConDetalles(SolicitudCompra solicitud, List<DetalleSolicitudCompra> detalles)
+        {
+            try
+            {
+                using (var transaccion = contexto.Database.BeginTransaction())
+                {
+                    var solicitudCompra = contexto.SolicitudCompras.Include(S => S.DetalleSolicitudCompras).FirstOrDefault(x => x.PksolicitudCompra == solicitud.PksolicitudCompra);
+
+                    if (solicitudCompra != null)
+                    {
+                        if (solicitudCompra.DetalleSolicitudCompras.Count() > detalles.Count())
+                        {
+                            solicitudCompra.IndEstado = 4;
+                            solicitudCompra.FecEntrega = solicitudCompra.FecEntrega.Value.AddDays(2);
+                        }
+                        solicitudCompra.Fkvendedor = solicitud.Fkvendedor;
+                        solicitudCompra.Fkcliente = solicitud.Fkcliente;
+                        solicitudCompra.IndTipoEntrega = solicitud.IndTipoEntrega;
+                        solicitudCompra.FecEntrega = solicitud.FecEntrega;
+                        solicitudCompra.FecSolicitud = solicitud.FecSolicitud;
+                        solicitudCompra.DetalleSolicitudCompras = detalles;
+                    }
+
+                    if (contexto.SaveChanges() > 0)
+                    {
+                        transaccion.Commit();
+                        return new RespuestaDTO
+                        {
+                            Codigo = 1,
+                            Contenido = solicitudCompra
+                        };
+                    }
+                    else
+                    {
+                        transaccion.Rollback();
+                        throw new Exception("No se pudo actualizar el cliente especificado");
+
+                    }
+
+                }
+            }
+            catch (Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+        }
+
         #endregion
 
         #endregion
@@ -606,6 +661,59 @@ namespace AppCenfoMusica.Datos
         #endregion
 
         #region Filtrado
+
+        public RespuestaDTO FiltrarSolicitudCompraConDetalles(List<DateTime> fechaEntrega, List<DateTime> fechaSolicitud, int tipoEntrega,
+    int codigoProducto, int codigoCliente, int codigoVendedor)
+        {
+            try
+            {
+                List<SolicitudCompra> datosEncontrados = new List<SolicitudCompra>();
+
+                datosEncontrados = contexto.SolicitudCompras.Include(S => S.DetalleSolicitudCompras).ToList();
+
+                if (fechaEntrega.Count == 2)
+                {
+                    datosEncontrados = datosEncontrados.Where(S => S.FecEntrega >= fechaEntrega[0] && S.FecEntrega <= fechaEntrega[1]).ToList();
+                }
+
+                if (fechaSolicitud.Count == 2)
+                {
+                    datosEncontrados = datosEncontrados.Where(S => S.FecSolicitud >= fechaSolicitud[0] && S.FecSolicitud <= fechaSolicitud[1]).ToList();
+                }
+
+                if (tipoEntrega > 0)
+                {
+                    datosEncontrados = datosEncontrados.Where(S => S.IndTipoEntrega == tipoEntrega).ToList();
+                }
+
+                if (codigoCliente > 0)
+                {
+                    datosEncontrados = datosEncontrados.Where(S => S.Fkcliente == codigoCliente).ToList();
+                }
+
+                if (codigoVendedor > 0)
+                {
+                    datosEncontrados = datosEncontrados.Where(S => S.Fkvendedor == codigoVendedor).ToList();
+                }
+
+                if (datosEncontrados != null && datosEncontrados.Count() > 0)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = datosEncontrados
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se logró encontrar ningún producto con el código especificado");
+                }
+            }
+            catch (Exception error)
+            {
+                return ControladorRetornos.ControladorErrores(error);
+            }
+        }
 
         // Filtro por parámetros solidos
         public RespuestaDTO FiltradoSolicicitudComprasParametrosSolidos(DateTime? fechaEntregaInicial, DateTime? fechaEntregaFinal, 

@@ -134,23 +134,33 @@ namespace AppCenfoMusica.Datos
         {
             try
             {
-                var respuesta = BuscarSolicitudCompraDetallePorID_DTO_Validacion(idDetalleSolicitudCompra);
-
-                if (respuesta.Contenido.GetType() != typeof(ErrorDTO))
+                using (var transaccion = contexto.Database.BeginTransaction())
                 {
-                    contexto.SolicitudCompras.Remove(((SolicitudCompra)respuesta.Contenido));
+                    var respuesta = BuscarSolicitudCompraDetallePorID_DTO_Validacion(idDetalleSolicitudCompra);
 
-                    if (contexto.SaveChanges() > 0)
+                    if (respuesta.Contenido.GetType() != typeof(ErrorDTO))
                     {
-                        return new RespuestaDTO
+                        contexto.DetalleSolicitudCompras.Remove(((DetalleSolicitudCompra)respuesta.Contenido));                     
+                        
+                        if (contexto.SaveChanges() > 0)
                         {
-                            Codigo = 1,
-                            Contenido = new BaseDTO { Mensaje = "El detalle de solicitud de compra se eliminó satisfactoriamente" }
-                        };
-                    }
-                }
+                            transaccion.Commit();
+                            return new RespuestaDTO
+                            {
+                                Codigo = 1,
+                                Contenido = new BaseDTO { Mensaje = "El detalle de solicitud de compra se eliminó satisfactoriamente" }
+                            };
+                        }
+                        else
+                        {
+                            transaccion.Rollback();
 
-                throw new Exception("No se pudo actualizar el detalle de la solicitud de compra especificada");
+                        }
+                    }
+                    throw new Exception("No se pudo actualizar el detalle de la solicitud de compra especificada");
+
+
+                }
             }
             catch (Exception error)
             {
@@ -161,6 +171,7 @@ namespace AppCenfoMusica.Datos
                 };
             }
         }
+
         #endregion
 
         #endregion

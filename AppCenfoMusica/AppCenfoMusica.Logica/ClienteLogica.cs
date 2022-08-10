@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AppCenfoMusica.Datos;
 using AppCenfoMusica.Datos.CenfomusicaModel;
 using AppCenfoMusica.DTO;
+using AppCenfoMusica.Logica.Helpers;
 
 namespace AppCenfoMusica.Logica
 {
@@ -93,11 +94,13 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                return new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
+                return ControladorRetornosLogica.ControladorErrores(error);
+
+                //return new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
             }
         }
 
@@ -132,15 +135,17 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                respuesta.Clear();
-                var errorCatch = new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
-                respuesta.Add(errorCatch);
+                return ControladorRetornosLogica.ControladorErroresLista(error);
 
-                return respuesta;
+                //respuesta.Clear();
+                //var errorCatch = new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
+                //respuesta.Add(errorCatch);
+
+                //return respuesta;
             }
         }
 
@@ -172,11 +177,12 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                return new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
+                return ControladorRetornosLogica.ControladorErrores(error);
+                //return new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
             }
         }
 
@@ -208,11 +214,12 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                return new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
+                return ControladorRetornosLogica.ControladorErrores(error);
+                //return new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
             }
         }
 
@@ -244,11 +251,12 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                return new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
+                return ControladorRetornosLogica.ControladorErrores(error);
+                //return new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
             }
         }
 
@@ -275,11 +283,12 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                return new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
+                return ControladorRetornosLogica.ControladorErrores(error);
+                //return new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
             }
         }
 
@@ -307,11 +316,12 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                return new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
+                return ControladorRetornosLogica.ControladorErrores(error);
+                //return new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
             }
         }
 
@@ -353,15 +363,17 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                respuesta.Clear();
-                var errorCatch = new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
-                respuesta.Add(errorCatch);
+                return ControladorRetornosLogica.ControladorErroresLista(error);
 
-                return respuesta;
+                //respuesta.Clear();
+                //var errorCatch = new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
+                //respuesta.Add(errorCatch);
+
+                //return respuesta;
             }
         }
 
@@ -532,15 +544,17 @@ namespace AppCenfoMusica.Logica
             }
             catch (Exception error)
             {
-                respuesta.Clear();
-                var errorCatch = new ErrorDTO
-                {
-                    CodigoError = -1,
-                    MensajeError = error.Message
-                };
-                respuesta.Add(errorCatch);
+                return ControladorRetornosLogica.ControladorErroresLista(error);
 
-                return respuesta;
+                //respuesta.Clear();
+                //var errorCatch = new ErrorDTO
+                //{
+                //    CodigoError = -1,
+                //    MensajeError = error.Message
+                //};
+                //respuesta.Add(errorCatch);
+
+                //return respuesta;
             }
         }
 
