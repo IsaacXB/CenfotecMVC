@@ -1,0 +1,50 @@
+﻿@model AppCenfoMusica.Web.ViewModels.GestionProductosVM
+
+@{
+    ViewData["Title"] = "ListarProductos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Listado total de productos</h1>
+<br />
+<div class="alert alert-info">
+    <b>Sumatoria de precios de productos: </b> @ViewBag.PreciosTotales
+</div>
+<div class="alert alert-info">
+    <b>Total de productos en bodega: </b> @ViewData["TotalProductos"]
+</div>
+
+<p>
+    <a asp-action="AgregarProducto" class="btn btn-success">Agregar producto</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad en Bodega</th>
+            <th>Tipo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListaProductos)
+        {
+            <tr>
+                <td>@item.IdEntidad</td>
+                <td>@item.Nombre</td>
+                <td>@item.PrecioUnitario</td>
+                <td>@item.CantidadBodega</td>
+                <td>@item.TipoProducto</td>
+                <td>
+                    <div class="btn-group">
+                        @Html.ActionLink("Editar", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Detalles", "BuscarProductoPorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Eliminar", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-danger" })
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
