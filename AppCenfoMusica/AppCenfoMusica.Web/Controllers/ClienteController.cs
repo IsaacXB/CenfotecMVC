@@ -13,7 +13,7 @@ namespace AppCenfoMusica.Web.Controllers
             GestionClientesVM model = new GestionClientesVM();
 
             // Define la conexión con nuestros servicios
-            var url = "https://localhost:7257/api/Service/BuscarClientePorId";
+            var url = "https://localhost:7257/api/Service/BuscarClientePorId/" + id.ToString();
 
             // Consulta al servicio
             var webrequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);

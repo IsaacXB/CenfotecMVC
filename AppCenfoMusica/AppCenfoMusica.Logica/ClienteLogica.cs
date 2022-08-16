@@ -47,7 +47,8 @@ namespace AppCenfoMusica.Logica
                 Estado = (int)cliente.IndEstado,
                 FechaNacimiento = (DateTime)cliente.FecNacimiento,
                 Sexo = (int)cliente.IndSexo,
-                Telefono = cliente.TelCliente
+                Telefono = cliente.TelCliente,
+                Email = cliente.EmlCorreo
             };
         }
 
@@ -63,7 +64,8 @@ namespace AppCenfoMusica.Logica
                 IndEstado = cliente.Estado,
                 FecNacimiento = cliente.FechaNacimiento,
                 IndSexo = cliente.Sexo,
-                TelCliente = cliente.Telefono
+                TelCliente = cliente.Telefono,
+                EmlCorreo = cliente.Email
             };
         }
 

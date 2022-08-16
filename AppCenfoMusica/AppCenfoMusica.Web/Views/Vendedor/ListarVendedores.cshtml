@@ -9,7 +9,7 @@
 <br />
 
 <p>
-    <a asp-action="AgregarCliente" class="btn btn-success">Agregar Vendedor</a>
+    <a asp-action="AgregarVendedor" class="btn btn-success">Agregar Vendedor</a>
 </p>
 <table class="table">
     <thead>
@@ -35,7 +35,7 @@
                 <td>
                     <div class="btn-group">
                         @Html.ActionLink("Editar", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-primary" })
-                        @Html.ActionLink("Detalles", "BuscarClientePorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Detalles", "BuscarVendedorPorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
                         @Html.ActionLink("Eliminar", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-danger" })
                     </div>
                 </td>
