@@ -91,9 +91,9 @@ namespace AppCenfoMusica.Servicios.Controllers
 
         #region Clientes
 
-        //Get: api/Service/ListaClientes
-        [HttpGet("ListaClientes")]
-        public IEnumerable<BaseDTO> ListaClientes()
+        //Get: api/Service/ListarClientes
+        [HttpGet("ListarClientes")]
+        public IEnumerable<BaseDTO> ListarClientes()
         {
             var resultado = new ClienteLogica().ListaClientes();
 
@@ -174,9 +174,9 @@ namespace AppCenfoMusica.Servicios.Controllers
 
         #region Vendedores
 
-        //Get: api/Service/ListaVendedores
-        [HttpGet("ListaVendedores")]
-        public IEnumerable<BaseDTO> ListaVendedores()
+        //Get: api/Service/ListarVendedores
+        [HttpGet("ListarVendedores")]
+        public IEnumerable<BaseDTO> ListarVendedores()
         {
             var resultado = new VendedorLogica().ListaVendedores();
 

@@ -1,0 +1,67 @@
+﻿@model AppCenfoMusica.Web.ViewModels.GestionClientesVM
+
+@{
+    ViewData["Title"] = "BuscarClientePorID";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalle de Cliente</h1>
+<br />
+@if (Model.Error == null)
+{
+    <div class="card">
+        <div class="card-header">
+            <b>@Model.Cliente.Nombre</b>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Cliente.Nombre)
+                    </td>
+                    <td>
+                        @Model.Cliente.Nombre
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Cliente.NombreUsuario)
+                    </td>
+                    <td>
+                        @Model.Cliente.NombreUsuario
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Cliente.Email)
+                    </td>
+                    <td>
+                        @Model.Cliente.Email
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Cliente.Estado)
+                    </td>
+                    <td>
+                        @Model.Cliente.Estado
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div class="btn-group">
+        <a class="btn btn-outline-info" asp-action="Index">Regresar</a>
+        @Html.ActionLink("Editar", "Edit", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-outline-info" })
+        <a class="btn btn-outline-info" href="#">Agregar al carrito</a>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        @Model.Error.MensajeError
+    </div>
+    <br />
+    <a class="btn btn-outline-info" asp-action="Index">Regresar</a>
+}

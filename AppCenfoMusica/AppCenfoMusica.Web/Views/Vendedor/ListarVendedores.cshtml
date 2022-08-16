@@ -1,0 +1,45 @@
+﻿@model AppCenfoMusica.Web.ViewModels.GestionVendedoresVM
+
+@{
+    ViewData["Title"] = "ListarVendedor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Listado total de Clientes</h1>
+<br />
+
+<p>
+    <a asp-action="AgregarCliente" class="btn btn-success">Agregar Vendedor</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Puesto</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListarVendedores)
+        {
+            <tr>
+                <td>@item.IdEntidad</td>
+                <td>@item.Nombre</td>
+                <td>@item.NombreUsuario</td>
+                <td>@item.Puesto</td>
+                <td>@item.Estado</td>
+
+                <td>
+                    <div class="btn-group">
+                        @Html.ActionLink("Editar", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Detalles", "BuscarClientePorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Eliminar", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-danger" })
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
