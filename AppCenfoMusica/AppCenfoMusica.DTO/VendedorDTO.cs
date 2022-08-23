@@ -25,7 +25,7 @@ namespace AppCenfoMusica.DTO
         public int Puesto { get; set; }
 
         [Required(ErrorMessage = "El nombre de usuario del Vendedor es un campo requerido.")]
-        [RegularExpression(@"/^([^0-9]*)$/")]
+        //[RegularExpression(@"/^([^0-9]*)$/")]
         [Display(Name = "Nombre de Usuario:")]
         [MinLength(5)]
         [MaxLength(10)]

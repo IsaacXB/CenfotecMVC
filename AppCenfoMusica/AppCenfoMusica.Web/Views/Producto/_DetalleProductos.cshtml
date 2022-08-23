@@ -1,0 +1,19 @@
+﻿@model List<AppCenfoMusica.DTO.ProductoDTO>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.IdEntidad</td>
+        <td>@item.Nombre</td>
+        <td>@item.PrecioUnitario</td>
+        <td>@item.CantidadBodega</td>
+        <td>@item.TipoProducto</td>
+        <td>
+            <div class="btn-group">
+                @Html.ActionLink("Editar", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Detalles", "BuscarProductoPorID", new { id = item.IdEntidad }, new { @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Eliminar", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-danger" })
+            </div>
+        </td>
+    </tr>
+}

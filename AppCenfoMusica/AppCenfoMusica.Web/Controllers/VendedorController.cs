@@ -7,7 +7,7 @@ namespace AppCenfoMusica.Web.Controllers
 {
     public class VendedorController : Controller
     {
-        public IActionResult BuscarVendedorPorId(int id)
+        public ActionResult BuscarVendedorPorId(int id)
         {
             GestionVendedoresVM model = new GestionVendedoresVM();
 
@@ -92,9 +92,63 @@ namespace AppCenfoMusica.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Index()
+        //GET: Únicamente nos va a mostrar el View (a menos que necesitemos configurar alguna cuestión adicional)
+        public ActionResult AgregarVendedor()
         {
             return View();
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AgregarVendedor(VendedorDTO model)
+        {
+            try
+            {
+                using (var cliente = new HttpClient())
+                {
+                    cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
+
+                    var tarea = cliente.PostAsJsonAsync<VendedorDTO>("AgregarVendedor", model);
+
+                    tarea.Wait();
+
+                    var resultado = tarea.Result;
+
+                    var datos = resultado.Content.ReadAsStringAsync().Result;
+
+                    if (!datos.Contains("Error"))
+                    {
+                        JsonSerializerSettings configuracion = new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.All
+                        };
+                        var respuesta = JsonConvert.DeserializeObject<VendedorDTO>(datos, configuracion);
+
+                        return RedirectToAction("BuscarVendedorPorID", new { id = respuesta.IdEntidad, accion = "guardar" });
+                        //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
+                    }
+                    else
+                    {
+                        var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
+                        ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
+                        throw new Exception("ErrorProgramacion");
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                if (error.Message == "ErrorProgramacion")
+                {
+                    return View();
+                }
+                else
+                {
+                    ModelState.AddModelError("ErrorSistema", "Ocurrió un error inesperado, favor ponerse en contacto con el personal autorizado");
+                    //almacenamiento en bitácroa que guarde efectivamente el texto del error
+                    return View();
+                }
+            }
         }
     }
 }

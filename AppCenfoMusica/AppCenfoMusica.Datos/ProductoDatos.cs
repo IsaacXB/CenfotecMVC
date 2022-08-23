@@ -207,42 +207,42 @@ namespace AppCenfoMusica.Datos
             }
         }
 
-        public RespuestaDTO AgregarProducto(ProductoDTO producto)
-        {
-            try
-            {
-                contexto.Productos.Add(new Producto { 
-                    NomProducto = producto.Nombre,
-                    CantProducto = producto.CantidadBodega,
-                    MtoPrecio = producto.PrecioUnitario,
-                    TipProducto = producto.TipoProducto
-                });
+        //public RespuestaDTO AgregarProducto(ProductoDTO producto)
+        //{
+        //    try
+        //    {
+        //        contexto.Productos.Add(new Producto { 
+        //            NomProducto = producto.Nombre,
+        //            CantProducto = producto.CantidadBodega,
+        //            MtoPrecio = producto.PrecioUnitario,
+        //            TipProducto = producto.TipoProducto
+        //        });
 
-                if (contexto.SaveChanges() > 0)
-                {
-                    return new RespuestaDTO
-                    {
-                        Codigo = 1,
-                        Contenido = producto
-                    };
-                }
-                else
-                {
-                    throw new Exception("No se logró realizar el guardado de datos solicitado.");
-                }
-            }
-            catch (Exception error)
-            {
-                return new RespuestaDTO
-                {
-                    Codigo = -1,
-                    Contenido = new ErrorDTO
-                    {
-                        MensajeError = error.Message
-                    }
-                };
-            }
-        }
+        //        if (contexto.SaveChanges() > 0)
+        //        {
+        //            return new RespuestaDTO
+        //            {
+        //                Codigo = 1,
+        //                Contenido = producto
+        //            };
+        //        }
+        //        else
+        //        {
+        //            throw new Exception("No se logró realizar el guardado de datos solicitado.");
+        //        }
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return new RespuestaDTO
+        //        {
+        //            Codigo = -1,
+        //            Contenido = new ErrorDTO
+        //            {
+        //                MensajeError = error.Message
+        //            }
+        //        };
+        //    }
+        //}
 
         public RespuestaDTO AgregarProducto(RespuestaDTO producto)
         {

@@ -39,14 +39,14 @@ namespace AppCenfoMusica.Logica
             };
         }
 
-        internal static Producto ConvertirProductoDTOAEntidad(Producto producto)
+        internal static Producto ConvertirProductoDTOAEntidad(ProductoDTO producto)
         {
             return new Producto
             {
-                CantProducto = producto.CantProducto,
-                MtoPrecio = producto.MtoPrecio,
-                NomProducto = producto.NomProducto,
-                TipProducto = producto.TipProducto
+                CantProducto = producto.CantidadBodega,
+                MtoPrecio = producto.PrecioUnitario,
+                NomProducto = producto.Nombre,
+                TipProducto = producto.TipoProducto
             };
         }
         #endregion
@@ -175,11 +175,6 @@ namespace AppCenfoMusica.Logica
             {
                 return new ErrorDTO { CodigoError = -1, MensajeError = error.Message };
             }
-        }
-
-        private object ConvertirProductoDTOAEntidad(ProductoDTO producto)
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

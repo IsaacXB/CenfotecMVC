@@ -309,55 +309,60 @@ namespace AppCenfoMusica.Datos
             }
         }
 
-        public RespuestaDTO AgregarCliente(ClienteDTO clienteDTO)
-        {
-            try
-            {
-                contexto.Clientes.Add(new Cliente
-                {
-                    NomCliente = clienteDTO.Nombre,
-                    NomUsuario = clienteDTO.NombreUsuario,
-                    IndContrasena = clienteDTO.Contrasena,
-                    IdCedula = clienteDTO.Cedula,
-                    IndEstado = clienteDTO.Estado,
-                    IndSexo = clienteDTO.Sexo,
-                    FecNacimiento = clienteDTO.FechaNacimiento,
-                    TelCliente = clienteDTO.Telefono
-                });
+        //public RespuestaDTO AgregarCliente(ClienteDTO clienteDTO)
+        //{
+        //    try
+        //    {
+        //        contexto.Clientes.Add(new Cliente
+        //        {
+        //            NomCliente = clienteDTO.Nombre,
+        //            NomUsuario = clienteDTO.NombreUsuario,
+        //            IndContrasena = clienteDTO.Contrasena,
+        //            IdCedula = clienteDTO.Cedula,
+        //            IndEstado = clienteDTO.Estado,
+        //            IndSexo = clienteDTO.Sexo,
+        //            FecNacimiento = clienteDTO.FechaNacimiento,
+        //            TelCliente = clienteDTO.Telefono,
+        //            EmlCorreo = clienteDTO.Email
+        //        });
 
-                if (contexto.SaveChanges() > 0)
-                {
-                    return new RespuestaDTO
-                    {
-                        Codigo = 1,
-                        Contenido = clienteDTO
-                    };
-                }
-                else
-                {
-                    throw new Exception("No se logró realizar el guardado de datos solicitado.");
-                }
-            }
-            catch (Exception error)
-            {
-                return new RespuestaDTO
-                {
-                    Codigo = -1,
-                    Contenido = new ErrorDTO
-                    {
-                        MensajeError = error.Message
-                    }
-                };
-            }
-        }
+        //        if (contexto.SaveChanges() > 0)
+        //        {
+        //            return new RespuestaDTO
+        //            {
+        //                Codigo = 1,
+        //                Contenido = clienteDTO
+        //            };
+        //        }
+        //        else
+        //        {
+        //            throw new Exception("No se logró realizar el guardado de datos solicitado.");
+        //        }
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return new RespuestaDTO
+        //        {
+        //            Codigo = -1,
+        //            Contenido = new ErrorDTO
+        //            {
+        //                MensajeError = error.Message
+        //            }
+        //        };
+        //    }
+        //}
 
         public RespuestaDTO AgregarCliente (RespuestaDTO cliente)
         {
             try
             {
-                if (cliente.Contenido == null) throw new Exception("No se logró realizar el guardado de datos solicitado.");
+                //if (cliente.Contenido == null) throw new Exception("No se logró realizar el guardado de datos solicitado.");
 
-                contexto.Clientes.Add((Cliente)cliente.Contenido);
+                //contexto.Clientes.Add((Cliente)cliente.Contenido);
+
+                var clienteConvertido = (Cliente)cliente.Contenido;
+
+                contexto.Clientes.Add(clienteConvertido);
 
                 if (contexto.SaveChanges() > 0)
                 {

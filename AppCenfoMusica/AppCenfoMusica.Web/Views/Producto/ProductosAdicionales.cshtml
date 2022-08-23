@@ -1,0 +1,26 @@
+﻿@model AppCenfoMusica.Web.ViewModels.GestionProductosVM
+
+@{
+    ViewData["Title"] = "ProductosAdicionales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Listado de productos de tipo 1</h1>
+<br />
+@{ await Html.RenderPartialAsync("_DatosStock"); }
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad en Bodega</th>
+            <th>Tipo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ await Html.RenderPartialAsync("_DetalleProductos", Model.ListaProductos); }
+    </tbody>
+</table>
