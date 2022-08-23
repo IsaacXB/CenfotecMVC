@@ -29,15 +29,19 @@ namespace AppCenfoMusica.Web.Controllers
                     datos = resultadoLecutra.ToString();
                 }
             }
+            JsonSerializerSettings configuracion = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
 
-            var resultado = JsonConvert.DeserializeObject<List<BaseDTO>>(datos);
+            var resultado = JsonConvert.DeserializeObject<BaseDTO>(datos, configuracion);
 
-            if (resultado.ElementAt(0).IdEntidad > 0)
+            if (resultado.IdEntidad > 0)
             {
                 //respuesta positiva
-                var resultadoVendedor = JsonConvert.DeserializeObject<List<VendedorDTO>>(datos);
+                var resultadoVendedor = JsonConvert.DeserializeObject<VendedorDTO>(datos);
 
-                model.ListarVendedores = resultadoVendedor;
+                model.Vendedor = resultadoVendedor;
             }
             else
             {
@@ -72,8 +76,12 @@ namespace AppCenfoMusica.Web.Controllers
                     datos = resultadoLecutra.ToString();
                 }
             }
+            JsonSerializerSettings configuracion = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
 
-            var resultado = JsonConvert.DeserializeObject<List<BaseDTO>>(datos);
+            var resultado = JsonConvert.DeserializeObject<List<BaseDTO>>(datos, configuracion);
 
             if (resultado.ElementAt(0).IdEntidad > 0)
             {

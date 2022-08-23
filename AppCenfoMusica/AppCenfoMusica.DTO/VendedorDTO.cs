@@ -33,9 +33,9 @@ namespace AppCenfoMusica.DTO
 
         [Required(ErrorMessage = "La contraseña del Vendedor es un campo requerido.")]
         [Display(Name = "Contraseña:")]
-        [MinLength(8)]
+        [MinLength(5)]
         [MaxLength(8)]
-        [ValidacionContraseña]
+        //[ValidacionContraseña]
         public string Contrasena { get; set; }
 
         [Display(Name = "Estado del Vendedor:")]

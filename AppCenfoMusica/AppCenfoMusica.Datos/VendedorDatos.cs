@@ -213,51 +213,51 @@ namespace AppCenfoMusica.Datos
             }
         }
 
-        public RespuestaDTO AgregarVendedor(VendedorDTO vendedorDTO)
-        {
-            try
-            {
-                contexto.Vendedors.Add(new Vendedor
-                {
-                    NomVendedor = vendedorDTO.Nombre,
-                    IndPuesto = vendedorDTO.Puesto,
-                    NomUsuario = vendedorDTO.NombreUsuario,
-                    IndContrasena = vendedorDTO.Contrasena,
-                    IndCedula = vendedorDTO.Cedula,
-                    IndEstado = vendedorDTO.Estado
-                });
+        //public RespuestaDTO AgregarVendedor(VendedorDTO vendedorDTO)
+        //{
+        //    try
+        //    {
+        //        contexto.Vendedors.Add(new Vendedor
+        //        {
+        //            NomVendedor = vendedorDTO.Nombre,
+        //            IndPuesto = vendedorDTO.Puesto,
+        //            NomUsuario = vendedorDTO.NombreUsuario,
+        //            IndContrasena = vendedorDTO.Contrasena,
+        //            IndCedula = vendedorDTO.Cedula,
+        //            IndEstado = vendedorDTO.Estado
+        //        });
 
-                if (contexto.SaveChanges() > 0)
-                {
-                    return new RespuestaDTO
-                    {
-                        Codigo = 1,
-                        Contenido = vendedorDTO
-                    };
-                }
-                else
-                {
-                    throw new Exception("No se logró realizar el guardado de datos solicitado.");
-                }
+        //        if (contexto.SaveChanges() > 0)
+        //        {
+        //            return new RespuestaDTO
+        //            {
+        //                Codigo = 1,
+        //                Contenido = vendedorDTO
+        //            };
+        //        }
+        //        else
+        //        {
+        //            throw new Exception("No se logró realizar el guardado de datos solicitado.");
+        //        }
 
-                return new RespuestaDTO
-                {
-                    Codigo = 1,
-                    Contenido = vendedorDTO
-                };
-            }
-            catch (Exception error)
-            {
-                return new RespuestaDTO
-                {
-                    Codigo = -1,
-                    Contenido = new ErrorDTO
-                    {
-                        MensajeError = error.Message
-                    }
-                };
-            }
-        }
+        //        return new RespuestaDTO
+        //        {
+        //            Codigo = 1,
+        //            Contenido = vendedorDTO
+        //        };
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        return new RespuestaDTO
+        //        {
+        //            Codigo = -1,
+        //            Contenido = new ErrorDTO
+        //            {
+        //                MensajeError = error.Message
+        //            }
+        //        };
+        //    }
+        //}
 
         public RespuestaDTO AgregarVendedor(RespuestaDTO vendedor)
         {
