@@ -269,7 +269,22 @@ namespace AppCenfoMusica.Servicios.Controllers
                 return (ErrorDTO)resultado;
             }
         }
-       
+
+        [HttpPost("ActualizarEstadoVendedor")]
+        public BaseDTO ActualizarEstadoVendedor(VendedorDTO vendedorDTO)
+        {
+            var resultado = new VendedorLogica().ActualizarVendedor(vendedorDTO);
+
+            if (resultado.GetType() != typeof(ErrorDTO))
+            {
+                return (VendedorDTO)resultado;
+            }
+            else
+            {
+                return (ErrorDTO)resultado;
+            }
+        }
+
         #endregion
 
     }

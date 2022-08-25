@@ -1,0 +1,79 @@
+﻿@model AppCenfoMusica.DTO.VendedorDTO
+
+
+@{
+    ViewData["Title"] = "BuscarVendedorPorID";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Editar Vendedor</h1>
+<br />
+@using (Html.BeginForm()) { 
+    <form asp-action="Editar">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.HiddenFor(model => model.IdEntidad)
+    @Html.HiddenFor(model => model.Nombre)
+    @Html.HiddenFor(model => model.NombreUsuario)
+    @Html.HiddenFor(model => model.Estado)
+    @Html.HiddenFor(model => model.Cedula)
+    @Html.HiddenFor(model => model.Puesto)
+    @Html.HiddenFor(model => model.Contrasena)
+
+    @if (ViewBag.TipoVendedor != null)
+    {
+        <div class="alert alert-info">@ViewBag.TipoVendedor</div>
+    }
+    @if (ViewData["EstadoVendedor"] != null)
+    {
+        <div class="alert alert-info">@ViewData["EstadoVendedor"]</div>
+    }
+    <div class="card">
+        <div class="card-header">
+            <b>@Model.Nombre</b>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Nombre)
+                    </td>
+                    <td>
+                        @Model.Nombre
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.NombreUsuario)
+                    </td>
+                    <td>
+                        @Model.NombreUsuario
+                    </td>
+                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(model => model.Cedula)
+                        </td>
+                        <td>
+                            @Model.Cedula
+                        </td>
+                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Estado)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Estado)
+                    </td>
+                </tr>
+            </table>
+                <div class="form-group">
+                    <input type="submit" value="Editar" class="btn btn-primary" name="Actualizar"/>
+                </div>
+        </div>
+    </div>
+        </form>
+    <br />
+    <div class="btn-group">
+        <a class="btn btn-outline-info" asp-action="ListarVendedores">Regresar</a>
+    </div>
+    }
