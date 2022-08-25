@@ -1,10 +1,12 @@
 ﻿using AppCenfoMusica.DTO;
 using AppCenfoMusica.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace AppCenfoMusica.Web.Controllers
 {
+    //[Authorize]
     public class VendedorController : Controller
     {
         public ActionResult BuscarVendedorPorId(int id)

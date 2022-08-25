@@ -206,6 +206,23 @@ namespace AppCenfoMusica.Servicios.Controllers
             }
         }
 
+        //Get: api/Service/ValidarVendedor/
+        [HttpPost("ValidarVendedor")]
+        public BaseDTO ValidarVendedor( string userName, string password)
+        {
+            var resultado = new VendedorLogica().ValidarVendedor(userName, password);
+
+            if (resultado.GetType() != typeof(ErrorDTO))
+            {
+                return (VendedorDTO)resultado;
+            }
+            else
+            {
+                return (ErrorDTO)resultado;
+            }
+        }
+
+
         //Get: api/Service/AgregarVendedor/
         [HttpPost("AgregarVendedor")]
         public BaseDTO AgregarVendedor(VendedorDTO vendedor)
@@ -221,6 +238,7 @@ namespace AppCenfoMusica.Servicios.Controllers
                 return (ErrorDTO)resultado;
             }
         }
+
         //Get: api/Service/AgregarVendedorParametros/
         [HttpPost("AgregarVendedorParametros")]
         public BaseDTO AgregarVendedorParametros(string nombre, int puesto, string nomUsuario, string contrasena, string cedula, int estado)
@@ -251,6 +269,7 @@ namespace AppCenfoMusica.Servicios.Controllers
                 return (ErrorDTO)resultado;
             }
         }
+       
         #endregion
 
     }

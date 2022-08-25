@@ -1,58 +1,71 @@
-﻿using AppCenfoMusica.Web.Models;
+﻿using AppCenfoMusica.DTO;
+using AppCenfoMusica.Logica;
+using AppCenfoMusica.Web.Models;
 using AppCenfoMusica.Web.ViewModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
 
 namespace AppCenfoMusica.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private SignInManager<User> _signManager;
-        private UserManager<User> _userManager;
-
-        public AccountController(UserManager<User> userManager, SignInManager<User> signManager)
-        {
-            _userManager = userManager;
-            _signManager = signManager;
-        }
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl = "")
+        public ActionResult Login(string returnUrl = "")
         {
-            var model = new LoginVM { ReturnUrl = returnUrl };
+            string userType = returnUrl.Contains("Cliente") ? "Cliente" : "Vendedor";
+
+            var model = new LoginVM { ReturnUrl = returnUrl, UserType = userType };
+   
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await _signManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Logout()
+        //{
+        //    //await _signManager.SignOutAsync();
+        //    return RedirectToAction("Index", "Home");
+        //}
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVM model)
+        public IActionResult Login(LoginVM model)
         {
             if (ModelState.IsValid)
             {
-                var result = await _signManager.PasswordSignInAsync(model.Username,
-                   model.Password, model.RememberMe, false);
-
-                if (result.Succeeded)
+                if (model.UserType == "Vendedor")
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    var resultado = new VendedorLogica().ValidarVendedor(model.Username, model.Password);
+
+                    if (resultado.GetType() != typeof(ErrorDTO))
                     {
-                        return Redirect(model.ReturnUrl);
+                        //Respuesta positiva
+                        model.IsAuthenticated = true;
+
+                        ViewBag.IsAuthenticated = true;
+                        ViewBag.UserName = model.Username;
+                       // var authenticationType = new AuthenticationType();
+                        var claimPrincipal = new ClaimsPrincipal();
+                        var claimIdentity = new ClaimsIdentity();
+                        claimPrincipal.AddIdentity(claimIdentity);
+                        RedirectToAction("ListarVendedores", "Vendedor");
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        //Respuesta negativa
+                        model.IsAuthenticated = false;
+                        ViewBag.UserName = string.Empty;
                     }
+
+                    return View(model);
                 }
+
             }
             ModelState.AddModelError("", "Invalid login attempt");
             return View(model);

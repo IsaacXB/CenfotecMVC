@@ -147,6 +147,30 @@ namespace AppCenfoMusica.Logica
             }
         }
 
+        public BaseDTO ValidarVendedor(string userName, string password)
+        {
+            try
+            {
+                VendedorDatos intermedio = new VendedorDatos(contexto);
+
+                var resultado = intermedio.ValidarVendedor(userName, password);
+
+                if (resultado.Codigo > 0)
+                {
+                    var vendedor = (Vendedor)resultado.Contenido;
+                    var respuesta = ConvertirEntidadVendedorADTO(vendedor);
+                    return respuesta;
+                }
+                {
+                    return (ErrorDTO)resultado.Contenido;
+                }
+            }
+            catch (Exception error)
+            {
+                return ControladorRetornosLogica.ControladorErrores(error);
+            }
+        }
+
         #endregion
 
         #region Almacenamiento

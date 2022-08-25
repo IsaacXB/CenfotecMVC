@@ -4,9 +4,11 @@
 }
 <h2>Login</h2>
 
+
 <form method="post" asp-controller="Account" asp-action="Login"
       asp-route-returnurl="@Model.ReturnUrl">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.HiddenFor(model => model.UserType)
 
     <div>
         <label asp-for="Username"></label>
@@ -20,10 +22,10 @@
         <span asp-validation-for="Password"></span>
     </div>
 
-    <div>
+@*    <div>
         <label asp-for="RememberMe"></label>
         <input asp-for="RememberMe" />
         <span asp-validation-for="RememberMe"></span>
-    </div>
+    </div>*@
     <input type="submit" value="Login" />
 </form>

@@ -34,6 +34,37 @@ namespace AppCenfoMusica.Datos
             return vendedor;
 
         }
+
+        public RespuestaDTO ValidarVendedor(string userName, string password)
+        {
+            try
+            {
+                var vendedor = contexto.Vendedors.FirstOrDefault(x => x.NomUsuario == userName && x.IndContrasena == password);
+
+                if (vendedor != null)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = vendedor
+                    };
+                }
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+
+            return null;
+        }
         public RespuestaDTO BuscarVendedorPorIdDTO(int id)
         {
             var vendedor = contexto.Vendedors.FirstOrDefault(x => x.Pkvendedor == id);

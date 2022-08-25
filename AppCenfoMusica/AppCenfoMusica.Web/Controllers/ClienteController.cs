@@ -1,12 +1,14 @@
 ﻿using AppCenfoMusica.DTO;
 using AppCenfoMusica.Logica;
 using AppCenfoMusica.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 
 namespace AppCenfoMusica.Web.Controllers
 {
+    //[Authorize]
     public class ClienteController : Controller
     {
         public IActionResult BuscarClientePorId(int id, string? accion)

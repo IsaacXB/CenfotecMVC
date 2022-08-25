@@ -1,5 +1,4 @@
-//using AppCenfoMusica.Web.Models;
-//using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddControllers();
-//builder.Services.AddIdentity<User, IdentityRole>();
+//builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.LoginPath = new PathString("/Account/Login");
+        });
 
 
 
@@ -26,6 +31,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
@@ -37,3 +43,5 @@ app.MapControllerRoute(
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 app.Run();
+
+
