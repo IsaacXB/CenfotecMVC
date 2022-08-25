@@ -26,15 +26,26 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ListarProductos">Productos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="AgregarCliente"> Agregar Cliente</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="ListarClientes">Clientes</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Vendedor" asp-action="ListarVendedores">Vendedores</a>
                         </li>
                     </ul>
+                </div>
+                <div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div>@User.Identity.Name</div>
+                        <form method="post" asp-controller="Account" aspcontroller="Logout">
+                            <input type="submit" value="Logout" />
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login">Login</a>
+                        //<a asp-controller="Account" asp-action="Register">Register</a>
+                    }
                 </div>
             </div>
         </nav>

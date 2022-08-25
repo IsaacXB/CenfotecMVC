@@ -34,7 +34,7 @@ namespace AppCenfoMusica.Web.Controllers
             GestionProductosVM model = new GestionProductosVM();
 
             //Tenemos que definir la conexión con nuestros servicios
-            var url = "https://localhost:44363/api/CenfomusicaService/ListaProductos";
+            var url = "https://localhost:7257/api/Service/ListaProductos";
 
             var webrequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url); // Nos genera la consulta al servicio
 
@@ -58,13 +58,13 @@ namespace AppCenfoMusica.Web.Controllers
                 TypeNameHandling = TypeNameHandling.All
             };
 
-            var resultado = JsonConvert.DeserializeObject<List<BaseDTO>>(datos, configuracion);
+            var resultado = JsonConvert.DeserializeObject<List<ProductoDTO>>(datos, configuracion);
 
             //if(resultado.ElementAt(0).IdEntidad > 0)
-            if (resultado.ElementAt(0).GetType() != typeof(ErrorDTO))
+            if (resultado.ElementAt(0).GetType() != null)
             {
 
-                model.ListaProductos = resultado.OfType<ProductoDTO>().Where(P => P.TipoProducto == 1).ToList();
+                model.ListaProductos = resultado.OfType<ProductoDTO>().ToList();
 
                 ViewBag.PreciosTotales = HttpContext.Session.GetString("PreciosTotales");
 
@@ -72,7 +72,7 @@ namespace AppCenfoMusica.Web.Controllers
             }
             else
             {
-                model.Error = (ErrorDTO)resultado.ElementAt(0);
+               // model.Error = (ErrorDTO)resultado.ElementAt(0);
             }
 
 

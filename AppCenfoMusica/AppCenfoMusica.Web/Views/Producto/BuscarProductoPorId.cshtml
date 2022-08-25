@@ -7,8 +7,17 @@
 
 <h1>Detalle de producto</h1>
 <br />
+<h4>@ViewBag.ProductosBodega</h4>
+<h5>@ViewData["TotalProductos"]</h5>
+<br />
 @if (Model.Error == null)
 {
+    if (ViewBag.Accion != null)
+    {
+        <div class="alert alert-success">@ViewBag.Accion</div>
+    }
+    <br />
+    <form asp-action="BuscarProductoPorID">
     <div class="card">
         <div class="card-header">
             <b>@Model.Producto.Nombre</b>
@@ -43,6 +52,26 @@
         </div>
     </div>
     <br />
+        @Html.HiddenFor(model => model.Producto.IdEntidad)
+        @Html.DisplayNameFor(model => model.CantidadXProducto)
+        <div>
+            @Html.TextBoxFor(model => model.CantidadXProducto, new { @class = "form-control" })
+            <br />
+            <input type="submit" value="Agregar al Carrito" class="btn btn-primary" />
+
+            @if (ViewBag.Mensaje != null)
+            {
+                <div class="alert alert-success">@ViewBag.Mensaje</div>
+            }
+            else
+            {
+                if (ViewBag.MensajeError != null)
+                {
+                    <div class="alert alert-success">@ViewBag.MensajeError</div>
+                }
+            }
+        </div>
+    </form>
     <div class="btn-group">
         <a class="btn btn-outline-info" asp-action="Index">Regresar</a>
         @Html.ActionLink("Editar", "Edit", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-outline-info" })
@@ -55,5 +84,5 @@ else
         @Model.Error.MensajeError
     </div>
     <br />
-    <a class="btn btn-outline-info" asp-action="Index">Regresar</a>
+    <a class="btn btn-outline-info" asp-action="ListarProductos">Regresar</a>
 }

@@ -7,12 +7,15 @@
 
 <h1>Listado total de productos</h1>
 <br />
-<div class="alert alert-info">
+@{
+    await Html.RenderPartialAsync("_DatosStock");
+}
+@*<div class="alert alert-info">
     <b>Sumatoria de precios de productos: </b> @ViewBag.PreciosTotales
 </div>
 <div class="alert alert-info">
     <b>Total de productos en bodega: </b> @ViewData["TotalProductos"]
-</div>
+</div>*@
 
 <p>
     <a asp-action="AgregarProducto" class="btn btn-success">Agregar producto</a>
@@ -29,7 +32,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.ListaProductos)
+        @{
+            await Html.RenderPartialAsync("_DetalleProductos", Model.ListaProductos);
+        }
+@*        @foreach (var item in Model.ListaProductos)
         {
             <tr>
                 <td>@item.IdEntidad</td>
@@ -45,6 +51,9 @@
                     </div>
                 </td>
             </tr>
-        }
+        }*@
     </tbody>
 </table>
+<p>
+    <a asp-action="ProductosAdicionales" class="btn btn-success">Ver productos tipo 1</a>
+</p>
