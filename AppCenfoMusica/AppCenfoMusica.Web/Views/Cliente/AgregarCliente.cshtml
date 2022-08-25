@@ -9,6 +9,8 @@
 
 <h4>Cliente</h4>
 <hr />
+@using (Html.BeginForm()) { 
+   
 <div class="row">
     <div class="col-md-4">
         <form asp-action="AgregarCliente">
@@ -64,7 +66,7 @@
         </form>
     </div>
 </div>
-
+}
 <div>
     <a asp-action="ListarClientes">Back to List</a>
 </div>
