@@ -9,6 +9,8 @@
       asp-route-returnurl="@Model.ReturnUrl">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @Html.HiddenFor(model => model.UserType)
+    @Html.HiddenFor(model => model.IsAuthenticated)
+    @Html.HiddenFor(model => model.ReturnUrl)
 
     <div>
         <label asp-for="Username"></label>

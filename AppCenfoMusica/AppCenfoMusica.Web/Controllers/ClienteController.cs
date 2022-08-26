@@ -41,6 +41,10 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult ListarClientes()
         {
+            if (ViewBag.IsAuthenticated == null || ViewBag.IsAuthenticated == false)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             GestionClientesVM model = new GestionClientesVM();
 
             // Define la conexión con nuestros servicios

@@ -34,7 +34,7 @@
                     </ul>
                 </div>
                 <div>
-                    @if (@ViewBag.IsAuthenticated != null)
+                    @if (@ViewBag.IsAuthenticated == true)
                     {
                         <div>@ViewBag.UserName</div>
                         <form method="post" asp-controller="Account" aspcontroller="Logout">

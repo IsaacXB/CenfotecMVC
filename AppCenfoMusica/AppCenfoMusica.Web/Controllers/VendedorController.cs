@@ -211,6 +211,11 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult ListarVendedores()
         {
+            if (ViewBag.IsAuthenticated == null || ViewBag.IsAuthenticated == false)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             GestionVendedoresVM model = new GestionVendedoresVM();
 
             // Define la conexión con nuestros servicios
@@ -251,8 +256,12 @@ namespace AppCenfoMusica.Web.Controllers
                 var resultadoError = JsonConvert.DeserializeObject<List<ErrorDTO>>(datos);
 
                 model.Error = (ErrorDTO)resultadoError.ElementAt(0);
+                return View(model);
             }
-            return View(model);
+               
+            
+            return View();
+
         }
 
         //GET: Únicamente nos va a mostrar el View (a menos que necesitemos configurar alguna cuestión adicional)

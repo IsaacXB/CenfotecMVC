@@ -150,6 +150,29 @@ namespace AppCenfoMusica.Logica
                 //return respuesta;
             }
         }
+        public BaseDTO ValidarCliente(string userName, string password)
+        {
+            try
+            {
+                ClienteDatos intermedio = new ClienteDatos(contexto);
+
+                var resultado = intermedio.ValidarCliente(userName, password);
+
+                if (resultado.Codigo > 0)
+                {
+                    var vendedor = (Cliente)resultado.Contenido;
+                    var respuesta = ConvertirEntidadClienteADTO(vendedor);
+                    return respuesta;
+                }
+                {
+                    return (ErrorDTO)resultado.Contenido;
+                }
+            }
+            catch (Exception error)
+            {
+                return ControladorRetornosLogica.ControladorErrores(error);
+            }
+        }
 
         #endregion
 
@@ -205,7 +228,7 @@ namespace AppCenfoMusica.Logica
                 {
                     //Escritura con respuesta positivo
 
-                    var clienteResultado = (Cliente)resultado.Contenido;
+                    var clienteResultado = ((Cliente)resultado.Contenido);
                     var respuesta = ConvertirEntidadClienteADTO(clienteResultado);
                     return respuesta;
                 }

@@ -225,7 +225,7 @@ namespace AppCenfoMusica.Logica
                 {
                     //Escritura con respuesta positivo
 
-                    var vendedorResultado = (Vendedor)resultado.Contenido;
+                    var vendedorResultado = ((Vendedor)resultado.Contenido);
                     var respuesta = ConvertirEntidadVendedorADTO(vendedorResultado);
                     return respuesta;
                 }

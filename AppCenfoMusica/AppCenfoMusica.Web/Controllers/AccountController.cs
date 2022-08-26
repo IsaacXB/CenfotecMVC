@@ -18,7 +18,7 @@ namespace AppCenfoMusica.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Login(string returnUrl = "")
+        public ActionResult Login(string returnUrl = "Home/Index")
         {
             string userType = returnUrl.Contains("Cliente") ? "Cliente" : "Vendedor";
 
@@ -37,34 +37,56 @@ namespace AppCenfoMusica.Web.Controllers
         [HttpPost]
         public IActionResult Login(LoginVM model)
         {
-            if (ModelState.IsValid)
+            string userType = model.ReturnUrl.Contains("Cliente") ? "Cliente" : "Vendedor";
+            model.UserType = userType;
+
+            if (model.UserType == "Vendedor")
             {
-                if (model.UserType == "Vendedor")
+                var resultado = new VendedorLogica().ValidarVendedor(model.Username, model.Password);
+
+                if (resultado.GetType() != typeof(ErrorDTO))
                 {
-                    var resultado = new VendedorLogica().ValidarVendedor(model.Username, model.Password);
+                    //Respuesta positiva
+                    model.IsAuthenticated = true;
 
-                    if (resultado.GetType() != typeof(ErrorDTO))
-                    {
-                        //Respuesta positiva
-                        model.IsAuthenticated = true;
-
-                        ViewBag.IsAuthenticated = true;
-                        ViewBag.UserName = model.Username;
-                       // var authenticationType = new AuthenticationType();
-                        var claimPrincipal = new ClaimsPrincipal();
-                        var claimIdentity = new ClaimsIdentity();
-                        claimPrincipal.AddIdentity(claimIdentity);
-                        RedirectToAction("ListarVendedores", "Vendedor");
-                    }
-                    else
-                    {
-                        //Respuesta negativa
-                        model.IsAuthenticated = false;
-                        ViewBag.UserName = string.Empty;
-                    }
-
-                    return View(model);
+                    ViewBag.IsAuthenticated = true;
+                    ViewBag.UserName = model.Username;
+                    HttpContext.Session.SetString("UserName", model.Username);
+                    RedirectToAction("ListarVendedores", "Vendedor");
                 }
+                else
+                {
+                    //Respuesta negativa
+                    model.IsAuthenticated = false;
+                    ViewBag.UserName = string.Empty;
+                    HttpContext.Session.Remove("UserName");
+                }
+
+                return View(model);
+            }
+            else if (model.UserType == "Cliente")
+            {
+                var resultado = new ClienteLogica().ValidarCliente(model.Username, model.Password);
+
+                if (resultado.GetType() != typeof(ErrorDTO))
+                {
+                    //Respuesta positiva
+                    model.IsAuthenticated = true;
+
+                    ViewBag.IsAuthenticated = true;
+                    ViewBag.UserName = model.Username;
+                    HttpContext.Session.SetString("UserName", model.Username);
+                    RedirectToAction("ListarVendedores", "Vendedor");
+                }
+                else
+                {
+                    //Respuesta negativa
+                    model.IsAuthenticated = false;
+                    ViewBag.UserName = string.Empty;
+                    HttpContext.Session.Remove("UserName");
+                }
+
+                return View(model);
 
             }
             ModelState.AddModelError("", "Invalid login attempt");

@@ -231,6 +231,37 @@ namespace AppCenfoMusica.Datos
                 };
             }
         }
+
+        public RespuestaDTO ValidarCliente(string userName, string password)
+        {
+            try
+            {
+                var cliente = contexto.Clientes.FirstOrDefault(x => x.NomUsuario == userName && x.IndContrasena == password);
+
+                if (cliente != null)
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = cliente
+                    };
+                }
+            }
+            catch (System.Exception error)
+            {
+                return new RespuestaDTO
+                {
+                    Codigo = -1,
+
+                    Contenido = new ErrorDTO
+                    {
+                        MensajeError = error.Message
+                    }
+                };
+            }
+
+            return null;
+        }
         #endregion
 
         #region Inserciones
@@ -366,7 +397,7 @@ namespace AppCenfoMusica.Datos
 
                 if (contexto.SaveChanges() > 0)
                 {
-                    return new RespuestaDTO { Codigo = 1, Contenido = cliente };
+                    return new RespuestaDTO { Codigo = 1, Contenido = (Cliente)cliente.Contenido };
                 }
                 else
                 {
