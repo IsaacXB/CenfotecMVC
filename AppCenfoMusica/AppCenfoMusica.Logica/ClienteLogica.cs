@@ -77,22 +77,31 @@ namespace AppCenfoMusica.Logica
         {
             try
             {
-                ClienteDatos intermedio = new ClienteDatos(contexto);
-
-                var resultado = intermedio.BuscarClientePorIdDTOValidacion(id);
-
-                if (resultado.Codigo > 0)
+                if (id > 0)
                 {
-                    //Escritura con respuesta positivo
+                    ClienteDatos intermedio = new ClienteDatos(contexto);
 
-                    var cliente = (Cliente)resultado.Contenido;
-                    var respuesta = ConvertirEntidadClienteADTO(cliente);
-                    return respuesta;
+                    var resultado = intermedio.BuscarClientePorIdDTOValidacion(id);
+
+                    if (resultado != null & resultado.Codigo > 0)
+                    {
+                        //Escritura con respuesta positivo
+
+                        var cliente = (Cliente)resultado.Contenido;
+                        var respuesta = ConvertirEntidadClienteADTO(cliente);
+                        return respuesta;
+                    }
+                    {
+                        //Escritura con respuesta negativa
+                        return (ErrorDTO)resultado.Contenido;
+                    }
                 }
+                else
                 {
                     //Escritura con respuesta negativa
-                    return (ErrorDTO)resultado.Contenido;
+                    return new ErrorDTO() { CodigoError = -1, MensajeError = "Número de Cliente invalido"  }; ;
                 }
+
             }
             catch (Exception error)
             {
@@ -158,14 +167,21 @@ namespace AppCenfoMusica.Logica
 
                 var resultado = intermedio.ValidarCliente(userName, password);
 
-                if (resultado.Codigo > 0)
+                if (resultado != null && resultado.Codigo > 0)
                 {
                     var vendedor = (Cliente)resultado.Contenido;
                     var respuesta = ConvertirEntidadClienteADTO(vendedor);
                     return respuesta;
                 }
                 {
-                    return (ErrorDTO)resultado.Contenido;
+                    if(resultado != null && resultado.Codigo < 0)
+                    {
+                        return (ErrorDTO)resultado.Contenido;
+                    }
+                    else
+                    {
+                        return new ErrorDTO() { CodigoError = -1, MensajeError = "Usuario o Contraseña Invalida." };
+                    }
                 }
             }
             catch (Exception error)

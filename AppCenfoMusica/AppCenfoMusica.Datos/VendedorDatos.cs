@@ -49,6 +49,14 @@ namespace AppCenfoMusica.Datos
                         Contenido = vendedor
                     };
                 }
+                else
+                {
+                    return new RespuestaDTO
+                    {
+                        Codigo = 1,
+                        Contenido = new ErrorDTO() {CodigoError = -1, MensajeError ="Usuario o Contraseña incorrecta." }
+                    };
+                }
             }
             catch (System.Exception error)
             {
@@ -326,11 +334,17 @@ namespace AppCenfoMusica.Datos
         public RespuestaDTO ActualizarEstadoVendedor(int codigoVendedor, int estado)
         {
             try
-            {
+            {               
                 var vendedor = contexto.Vendedors.FirstOrDefault(x => x.Pkvendedor == codigoVendedor);
 
                 if (vendedor != null)
                 {
+
+                    if (vendedor.IndEstado == estado)
+                    {
+                        return new RespuestaDTO { Codigo = 1, Contenido = new ErrorDTO() {CodigoError = -1, MensajeError = "No se han detectado cambios." } };
+                    }
+
                     vendedor.IndEstado = estado;
 
                     if (contexto.SaveChanges() > 0)

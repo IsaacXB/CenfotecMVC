@@ -170,6 +170,21 @@ namespace AppCenfoMusica.Servicios.Controllers
                 return (ErrorDTO)resultado;
             }
         }
+
+        [HttpPost("ActualizarEstadoCliente")]
+        public BaseDTO ActualizarEstadoCliente(ClienteDTO clienteDTO)
+        {
+            var resultado = new ClienteLogica().ActualizarCliente(clienteDTO);
+
+            if (resultado.GetType() != typeof(ErrorDTO))
+            {
+                return (ClienteDTO)resultado;
+            }
+            else
+            {
+                return (ErrorDTO)resultado;
+            }
+        }
         #endregion
 
         #region Vendedores

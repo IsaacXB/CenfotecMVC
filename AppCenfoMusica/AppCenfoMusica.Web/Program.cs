@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+builder.Services.AddMvc();
+builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 //builder.Services.AddAuthentication();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

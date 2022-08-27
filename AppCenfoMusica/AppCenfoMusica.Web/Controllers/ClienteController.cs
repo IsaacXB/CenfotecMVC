@@ -41,9 +41,10 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult ListarClientes()
         {
-            if (ViewBag.IsAuthenticated == null || ViewBag.IsAuthenticated == false)
+            if (HttpContext.Session.GetString("UserName") == null)
             {
-                return RedirectToAction("Login", "Account");
+                var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                return RedirectToAction("Login", "Account", logingVM);
             }
             GestionClientesVM model = new GestionClientesVM();
 
@@ -101,51 +102,60 @@ namespace AppCenfoMusica.Web.Controllers
         {
             try
             {
-                using (var cliente = new HttpClient())
+                if (ModelState.IsValid)
                 {
-                    cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
-
-                    var tarea = cliente.PostAsJsonAsync<ClienteDTO>("AgregarCliente", model);
-
-                    tarea.Wait();
-
-                    var resultado = tarea.Result;
-
-                    var datos = resultado.Content.ReadAsStringAsync().Result;
-
-                    if (!datos.Contains("Error"))
+                    using (var cliente = new HttpClient())
                     {
-                        var respuesta = JsonConvert.DeserializeObject<ClienteDTO>(datos);
+                        cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
 
-                        return RedirectToAction("BuscarClientePorID", new { id = respuesta.IdEntidad, accion = "guardar" });
-                        //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
-                    }
-                    else
-                    {
-                        var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
-                        ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
-                        throw new Exception("ErrorProgramacion");
+                        var tarea = cliente.PostAsJsonAsync<ClienteDTO>("AgregarCliente", model);
+
+                        tarea.Wait();
+
+                        var resultado = tarea.Result;
+
+                        var datos = resultado.Content.ReadAsStringAsync().Result;
+
+                        if (!datos.Contains("Error"))
+                        {
+                            var respuesta = JsonConvert.DeserializeObject<ClienteDTO>(datos);
+
+                            return RedirectToAction("BuscarClientePorID", new { id = respuesta.IdEntidad, accion = "guardar" });
+                            //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
+                        }
+                        else
+                        {
+                            var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
+                            ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
+                            throw new Exception("ErrorProgramacion");
+                        }
                     }
                 }
+                else
+                {
+                    ModelState.AddModelError("Error: ", "Datos inválidos");
+                    throw new Exception("ErrorProgramacion");
+                }
+
             }
             catch (Exception error)
             {
                 if (error.Message == "ErrorProgramacion")
                 {
-                    return View();
+                    return View(model);
                 }
                 else
                 {
                     ModelState.AddModelError("ErrorSistema", "Ocurrió un error inesperado, favor ponerse en contacto con el personal autorizado");
                     //almacenamiento en bitácroa que guarde efectivamente el texto del error
-                    return View();
+                    return View(model);
                 }
             }
         }
 
 
         [HttpGet]
-        public ActionResult Editar(int id)
+        public ActionResult EditarEstado(int id)
         {
             GestionClientesVM model = new GestionClientesVM();
 
@@ -200,40 +210,44 @@ namespace AppCenfoMusica.Web.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Editar(ClienteDTO model)
+        public ActionResult EditarEstado(ClienteDTO model)
         {
             try
             {
-                using (var cliente = new HttpClient())
+                if (ModelState.IsValid)
                 {
-                    cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
-
-                    var tarea = cliente.PostAsJsonAsync<ClienteDTO>("ActualizarCliente", model);
-
-                    tarea.Wait();
-
-                    var resultado = tarea.Result;
-
-                    var datos = resultado.Content.ReadAsStringAsync().Result;
-
-                    if (!datos.Contains("Error"))
+                    using (var cliente = new HttpClient())
                     {
-                        JsonSerializerSettings configuracion = new JsonSerializerSettings
+                        cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
+
+                        var tarea = cliente.PostAsJsonAsync<ClienteDTO>("ActualizarEstadoCliente", model);
+
+                        tarea.Wait();
+
+                        var resultado = tarea.Result;
+
+                        var datos = resultado.Content.ReadAsStringAsync().Result;
+
+                        if (!datos.Contains("Error"))
                         {
-                            TypeNameHandling = TypeNameHandling.All
-                        };
-                        var respuesta = JsonConvert.DeserializeObject<ClienteDTO>(datos, configuracion);
+                            JsonSerializerSettings configuracion = new JsonSerializerSettings
+                            {
+                                TypeNameHandling = TypeNameHandling.All
+                            };
+                            var respuesta = JsonConvert.DeserializeObject<ClienteDTO>(datos, configuracion);
 
-                        return RedirectToAction("BuscarClientePorID", new { id = respuesta.IdEntidad, accion = "guardar" });
-                        //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
-                    }
-                    else
-                    {
-                        var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
-                        ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
-                        throw new Exception("ErrorProgramacion");
+                            return RedirectToAction("BuscarClientePorID", new { id = respuesta.IdEntidad, accion = "guardar" });
+                            //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
+                        }
+                        else
+                        {
+                            var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
+                            ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
+                            throw new Exception("ErrorProgramacion");
+                        }
                     }
                 }
+
             }
             catch (Exception error)
             {
@@ -248,6 +262,118 @@ namespace AppCenfoMusica.Web.Controllers
                     return View();
                 }
             }
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditarDatos(int id)
+        {
+            GestionClientesVM model = new GestionClientesVM();
+
+            // Define la conexión con nuestros servicios
+            var url = "https://localhost:7257/api/Service/BuscarClientePorId/" + id.ToString();
+
+            // Consulta al servicio
+            var webrequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
+
+            string datos = "";
+
+            //Se almacena la respuesta a la consulta
+            using (var respuesta = webrequest.GetResponse())
+            {
+                //Se determina un lector general
+                using (var reader = new StreamReader(respuesta.GetResponseStream()))
+                {
+                    var resultadoLecutra = reader.ReadToEnd();
+                    datos = resultadoLecutra.ToString();
+                }
+            }
+            JsonSerializerSettings configuracion = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
+
+            var resultado = JsonConvert.DeserializeObject<BaseDTO>(datos, configuracion);
+
+            if (resultado.IdEntidad > 0)
+            {
+                //respuesta positiva
+                var resultadoVendedor = JsonConvert.DeserializeObject<ClienteDTO>(datos);
+
+                model.Cliente = resultadoVendedor;
+
+
+                ViewBag.TipoCliente = "Estado Cliente: " + SetEstadoCliente(model.Cliente.Estado);
+
+                return View(resultadoVendedor);
+            }
+            else
+            {
+                //respuesta negativa
+                var resultadoError = JsonConvert.DeserializeObject<List<ErrorDTO>>(datos);
+
+                model.Error = (ErrorDTO)resultadoError.ElementAt(0);
+            }
+            return View(model);
+
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditarDatos(ClienteDTO model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var cliente = new HttpClient())
+                    {
+                        cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
+
+                        var tarea = cliente.PostAsJsonAsync<ClienteDTO>("ActualizarEstadoCliente", model);
+
+                        tarea.Wait();
+
+                        var resultado = tarea.Result;
+
+                        var datos = resultado.Content.ReadAsStringAsync().Result;
+
+                        if (!datos.Contains("Error"))
+                        {
+                            JsonSerializerSettings configuracion = new JsonSerializerSettings
+                            {
+                                TypeNameHandling = TypeNameHandling.All
+                            };
+                            var respuesta = JsonConvert.DeserializeObject<ClienteDTO>(datos, configuracion);
+
+                            return RedirectToAction("BuscarClientePorID", new { id = respuesta.IdEntidad, accion = "guardar" });
+                            //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
+                        }
+                        else
+                        {
+                            var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
+                            ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
+                            throw new Exception("ErrorProgramacion");
+                        }
+                    }
+                }
+
+            }
+            catch (Exception error)
+            {
+                if (error.Message == "ErrorProgramacion")
+                {
+                    return View(model);
+                }
+                else
+                {
+                    ModelState.AddModelError("ErrorSistema", "Ocurrió un error inesperado, favor ponerse en contacto con el personal autorizado");
+                    //almacenamiento en bitácroa que guarde efectivamente el texto del error
+                    return View(model);
+                }
+            }
+            return View(model);
         }
 
         public string SetEstadoCliente(int estado)

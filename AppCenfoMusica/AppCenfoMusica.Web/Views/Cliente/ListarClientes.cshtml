@@ -34,7 +34,9 @@
 
                 <td>
                     <div class="btn-group">
-                        @Html.ActionLink("Editar", "Editar", new {  id=item.IdEntidad }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Editar Estado", "EditarEstado", new {  id=item.IdEntidad }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Editar Datos", "EditarDatos", new {  id=item.IdEntidad }, new { @class = "btn btn-outline-primary" })
+
                         @Html.ActionLink("Detalles", "BuscarClientePorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
                         @Html.ActionLink("Eliminar", "Eliminar", new { id=item.IdEntidad }, new { @class = "btn btn-outline-danger" })
                     </div>

@@ -65,7 +65,7 @@ namespace AppCenfoMusica.DTO.Helpers
                 if (value != null)
                 {
                     string? contraseña = value.ToString();
-                    bool tieneDigito = contraseña == null ? false : contraseña.All(char.IsDigit);
+                    bool tieneDigito = contraseña == null ? false : contraseña.Any(char.IsDigit);
                     bool tieneCaracterEspecial = contraseña == null ? false : TieneCaracterEspecial(contraseña);
                     bool tieneCaracterNoPermitido = contraseña == null ? false : TieneCaracterNoPermitido(contraseña);
                     if (tieneDigito && tieneCaracterEspecial && !tieneCaracterNoPermitido)

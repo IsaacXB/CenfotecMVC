@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,10 +34,10 @@
                         </li>
                     </ul>
                 </div>
-                <div>
-                    @if (@ViewBag.IsAuthenticated == true)
+@*                <div>
+                    @if (@ViewData["UserName"] != null)
                     {
-                        <div>@ViewBag.UserName</div>
+                        <div>@ViewData["UserName"] </div>
                         <form method="post" asp-controller="Account" aspcontroller="Logout">
                             <input type="submit" value="Logout" />
                         </form>
@@ -46,7 +47,7 @@
                         <a asp-controller="Account" asp-action="Login">Login</a>
                         //<a asp-controller="Account" asp-action="Register">Register</a>
                     }
-                </div>
+                </div>*@
             </div>
         </nav>
     </header>

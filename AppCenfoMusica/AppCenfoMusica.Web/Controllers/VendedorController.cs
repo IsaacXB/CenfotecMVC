@@ -103,7 +103,7 @@ namespace AppCenfoMusica.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Editar(int id)
+        public ActionResult EditarEstado(int id)
         {
             GestionVendedoresVM model = new GestionVendedoresVM();
 
@@ -159,61 +159,67 @@ namespace AppCenfoMusica.Web.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Editar(VendedorDTO model)
+        public ActionResult EditarEstado(VendedorDTO model)
         {
             try
             {
-                using (var cliente = new HttpClient())
+                if (ModelState.IsValid)
                 {
-                    cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
-
-                    var tarea = cliente.PostAsJsonAsync<VendedorDTO>("ActualizarVendedor", model);
-
-                    tarea.Wait();
-
-                    var resultado = tarea.Result;
-
-                    var datos = resultado.Content.ReadAsStringAsync().Result;
-
-                    if (!datos.Contains("Error"))
+                    using (var cliente = new HttpClient())
                     {
-                        JsonSerializerSettings configuracion = new JsonSerializerSettings
+                        cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
+
+                        var tarea = cliente.PostAsJsonAsync<VendedorDTO>("ActualizarEstadoVendedor", model);
+
+                        tarea.Wait();
+
+                        var resultado = tarea.Result;
+
+                        var datos = resultado.Content.ReadAsStringAsync().Result;
+
+                        if (!datos.Contains("Error"))
                         {
-                            TypeNameHandling = TypeNameHandling.All
-                        };
-                        var respuesta = JsonConvert.DeserializeObject<VendedorDTO>(datos, configuracion);
+                            JsonSerializerSettings configuracion = new JsonSerializerSettings
+                            {
+                                TypeNameHandling = TypeNameHandling.All
+                            };
+                            var respuesta = JsonConvert.DeserializeObject<VendedorDTO>(datos, configuracion);
 
-                        return RedirectToAction("BuscarVendedorPorID", new { id = respuesta.IdEntidad, accion = "guardar" });
-                        //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
-                    }
-                    else
-                    {
-                        var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
-                        ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
-                        throw new Exception("ErrorProgramacion");
+                            return RedirectToAction("BuscarVendedorPorID", new { id = respuesta.IdEntidad, accion = "guardar" });
+                            //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
+                        }
+                        else
+                        {
+                            var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
+                            ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
+                            throw new Exception();
+                        }
                     }
                 }
+                
             }
             catch (Exception error)
             {
                 if (error.Message == "ErrorProgramacion")
                 {
-                    return View();
+                    return View(model);
                 }
                 else
                 {
                     ModelState.AddModelError("ErrorSistema", "Ocurrió un error inesperado, favor ponerse en contacto con el personal autorizado");
                     //almacenamiento en bitácroa que guarde efectivamente el texto del error
-                    return View();
+                    return View(model);
                 }
             }
+            return View(model);
         }
 
         public ActionResult ListarVendedores()
         {
-            if (ViewBag.IsAuthenticated == null || ViewBag.IsAuthenticated == false)
+            if (HttpContext.Session.GetString("UserName") == null)
             {
-                return RedirectToAction("Login", "Account");
+                var logingVM = new LoginVM() { ReturnUrl = "Vendedor/ListarVendedores" };
+                return RedirectToAction("Login", "Account", logingVM);
             }
 
             GestionVendedoresVM model = new GestionVendedoresVM();
@@ -260,7 +266,7 @@ namespace AppCenfoMusica.Web.Controllers
             }
                
             
-            return View();
+            return View(model);
 
         }
 
@@ -312,13 +318,13 @@ namespace AppCenfoMusica.Web.Controllers
             {
                 if (error.Message == "ErrorProgramacion")
                 {
-                    return View();
+                    return View(model);
                 }
                 else
                 {
                     ModelState.AddModelError("ErrorSistema", "Ocurrió un error inesperado, favor ponerse en contacto con el personal autorizado");
                     //almacenamiento en bitácroa que guarde efectivamente el texto del error
-                    return View();
+                    return View(model);
                 }
             }
         }

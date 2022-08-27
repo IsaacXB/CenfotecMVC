@@ -52,7 +52,7 @@ namespace AppCenfoMusica.Web.Controllers
                     ViewBag.IsAuthenticated = true;
                     ViewBag.UserName = model.Username;
                     HttpContext.Session.SetString("UserName", model.Username);
-                    RedirectToAction("ListarVendedores", "Vendedor");
+                    return RedirectToAction("ListarVendedores", "Vendedor");
                 }
                 else
                 {
@@ -75,14 +75,16 @@ namespace AppCenfoMusica.Web.Controllers
 
                     ViewBag.IsAuthenticated = true;
                     ViewBag.UserName = model.Username;
+                    ViewData["UserName"] = model.Username;
                     HttpContext.Session.SetString("UserName", model.Username);
-                    RedirectToAction("ListarVendedores", "Vendedor");
+                    return RedirectToAction("ListarClientes", "Cliente");
                 }
                 else
                 {
                     //Respuesta negativa
                     model.IsAuthenticated = false;
                     ViewBag.UserName = string.Empty;
+                    ViewData["UserName"] = string.Empty;
                     HttpContext.Session.Remove("UserName");
                 }
 

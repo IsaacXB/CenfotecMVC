@@ -155,7 +155,7 @@ namespace AppCenfoMusica.Logica
 
                 var resultado = intermedio.ValidarVendedor(userName, password);
 
-                if (resultado.Codigo > 0)
+                if (resultado != null && resultado.Codigo > 0)
                 {
                     var vendedor = (Vendedor)resultado.Contenido;
                     var respuesta = ConvertirEntidadVendedorADTO(vendedor);
@@ -289,8 +289,8 @@ namespace AppCenfoMusica.Logica
             {
                 VendedorDatos intermedio = new VendedorDatos(contexto);
 
-                var resultado = intermedio.ActualizarVendedor(vendedorDTO.IdEntidad, vendedorDTO.Nombre, vendedorDTO.Puesto, vendedorDTO.NombreUsuario, vendedorDTO.Contrasena, vendedorDTO.Cedula, vendedorDTO.Estado);
-
+                //var resultado = intermedio.ActualizarVendedor(vendedorDTO.IdEntidad, vendedorDTO.Nombre, vendedorDTO.Puesto, vendedorDTO.NombreUsuario, vendedorDTO.Contrasena, vendedorDTO.Cedula, vendedorDTO.Estado);
+                var resultado = intermedio.ActualizarEstadoVendedor(vendedorDTO.IdEntidad, vendedorDTO.Estado);
                 if (resultado.Codigo > 0)
                 {
                     //Escritura con respuesta positivo

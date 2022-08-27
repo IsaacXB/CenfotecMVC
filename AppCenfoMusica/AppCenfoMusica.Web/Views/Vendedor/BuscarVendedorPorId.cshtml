@@ -61,8 +61,7 @@
     <br />
     <div class="btn-group">
         <a class="btn btn-outline-info" asp-action="ListarVendedores">Regresar</a>
-        @Html.ActionLink("Editar", "Edit", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-outline-info" })
-        <a class="btn btn-outline-info" href="#">Agregar al carrito</a>
+        @Html.ActionLink("Editar Estado", "EditarEstado", new {  id = Model.Vendedor.IdEntidad  }, new { @class = "btn btn-outline-info" })
     </div>
 }
 else
@@ -73,3 +72,9 @@ else
     <br />
     <a class="btn btn-outline-info" asp-action="ListarVendedores">Regresar</a>
 }
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
