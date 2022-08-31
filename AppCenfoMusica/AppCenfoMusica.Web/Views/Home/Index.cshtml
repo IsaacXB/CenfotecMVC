@@ -1,12 +1,75 @@
-﻿@using System.Security.Claims
+﻿
 @{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    /* Custom style to prevent carousel from being distorted
+       if for some reason image doesn't load */
+    .carousel-item {
+        width: 100%;
+        max-width: 1400px;
+        max-height: 600px !important;
+    }
+    .carousel-inner{
+        
+    }
+</style>
 <body>
 
     <div class="text-center">
         <h1 class="display-4">Bienvenido a la mejor tienda musical</h1>
         <p>Cenfotec - Proyecto Final MVC with .Net Core</a>.</p>
+    </div>
+
+    <div class="container-sm my-1">
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <!-- Carousel indicators -->
+            <ol class="carousel-indicators">
+                <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
+                <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
+                <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
+                <li data-bs-target="#myCarousel" data-bs-slide-to="3"></li>
+                <li data-bs-target="#myCarousel" data-bs-slide-to="4"></li>
+            </ol>
+
+            <!-- Wrapper for carousel items -->
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <a class="my-auto" asp-controller="Producto" asp-action="BuscarProductoPorId" asp-route-id="1">
+                        <img src="/Images/bateria.jpg" class="container-fluid w-100"  alt="Bateria">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a class="my-auto" asp-controller="Producto" asp-action="BuscarProductoPorId" asp-route-id="2">
+                        <img src="/Images/flauta.jpg" class="container-fluid w-100" alt="Flauta">
+                    </a>
+
+                </div>
+                <div class="carousel-item">
+                    <a class="my-auto" asp-controller="Producto" asp-action="BuscarProductoPorId" asp-route-id="3">
+                        <img src="/Images/guitarra.jpg" class="container-fluid w-100" alt="Guitarra">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a class="my-auto" asp-controller="Producto" asp-action="BuscarProductoPorId" asp-route-id="4">
+                        <img src="/Images/microfono.jpg" class="container-fluid w-100" alt="Micrófono">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a class="my-auto" asp-controller="Producto" asp-action="BuscarProductoPorId" asp-route-id="5">
+                        <img src="/Images/parlantes.jpg" class="container-fluid w-100" alt="Parlantes">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Carousel controls -->
+            <a class="carousel-control-prev" href="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+        </div>
     </div>
 
 </body>

@@ -16,6 +16,8 @@ namespace AppCenfoMusica.Web.Controllers
 
         public IActionResult Index()
         {
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             return View();
         }
 

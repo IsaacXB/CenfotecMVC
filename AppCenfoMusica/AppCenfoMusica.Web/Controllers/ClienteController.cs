@@ -13,6 +13,14 @@ namespace AppCenfoMusica.Web.Controllers
     {
         public IActionResult BuscarClientePorId(int id, string? accion)
         {
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
             GestionClientesVM model = new GestionClientesVM();
 
             var resultado = new ClienteLogica().BuscarClientePorID(id);
@@ -41,11 +49,15 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult ListarClientes()
         {
-            if (HttpContext.Session.GetString("UserName") == null)
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
             {
                 var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
                 return RedirectToAction("Login", "Account", logingVM);
             }
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
+
             GestionClientesVM model = new GestionClientesVM();
 
             // Define la conexión con nuestros servicios
@@ -92,6 +104,13 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult AgregarCliente()
         {
+            //if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            //{
+            //    var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+            //    return RedirectToAction("Login", "Account", logingVM);
+            //}
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             return View();
         }
 
@@ -157,6 +176,13 @@ namespace AppCenfoMusica.Web.Controllers
         [HttpGet]
         public ActionResult EditarEstado(int id)
         {
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             GestionClientesVM model = new GestionClientesVM();
 
             // Define la conexión con nuestros servicios
@@ -268,6 +294,14 @@ namespace AppCenfoMusica.Web.Controllers
         [HttpGet]
         public ActionResult EditarDatos(int id)
         {
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
             GestionClientesVM model = new GestionClientesVM();
 
             // Define la conexión con nuestros servicios

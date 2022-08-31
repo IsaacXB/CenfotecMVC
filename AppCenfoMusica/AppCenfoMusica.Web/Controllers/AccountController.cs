@@ -51,7 +51,11 @@ namespace AppCenfoMusica.Web.Controllers
 
                     ViewBag.IsAuthenticated = true;
                     ViewBag.UserName = model.Username;
+                    ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                    ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
                     HttpContext.Session.SetString("UserName", model.Username);
+                    HttpContext.Session.SetString("UserType", model.UserType);
                     return RedirectToAction("ListarVendedores", "Vendedor");
                 }
                 else
@@ -60,6 +64,9 @@ namespace AppCenfoMusica.Web.Controllers
                     model.IsAuthenticated = false;
                     ViewBag.UserName = string.Empty;
                     HttpContext.Session.Remove("UserName");
+                    HttpContext.Session.Remove("UserType");
+                    ModelState.AddModelError("", "Usuario o contraseña invalida.");
+
                 }
 
                 return View(model);
@@ -77,6 +84,7 @@ namespace AppCenfoMusica.Web.Controllers
                     ViewBag.UserName = model.Username;
                     ViewData["UserName"] = model.Username;
                     HttpContext.Session.SetString("UserName", model.Username);
+                    HttpContext.Session.SetString("UserType", model.UserType);
                     return RedirectToAction("ListarClientes", "Cliente");
                 }
                 else
@@ -86,12 +94,15 @@ namespace AppCenfoMusica.Web.Controllers
                     ViewBag.UserName = string.Empty;
                     ViewData["UserName"] = string.Empty;
                     HttpContext.Session.Remove("UserName");
+                    HttpContext.Session.Remove("UserType");
+                    ModelState.AddModelError("", "Usuario o contraseña invalida.");
+
                 }
 
                 return View(model);
 
             }
-            ModelState.AddModelError("", "Invalid login attempt");
+            ModelState.AddModelError("", "Error al intentar hacer login.");
             return View(model);
         }
     }

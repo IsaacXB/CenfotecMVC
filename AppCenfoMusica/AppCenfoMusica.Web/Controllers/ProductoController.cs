@@ -82,6 +82,8 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult ListarProductos()
         {
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             GestionProductosVM model = new GestionProductosVM();
 
             // Define la conexión con nuestros servicios

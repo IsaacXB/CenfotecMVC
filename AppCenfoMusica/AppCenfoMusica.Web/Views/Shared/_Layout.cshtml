@@ -34,13 +34,18 @@
                         </li>
                     </ul>
                 </div>
-@*                <div>
+@*                <div class="card">
                     @if (@ViewData["UserName"] != null)
                     {
-                        <div>@ViewData["UserName"] </div>
-                        <form method="post" asp-controller="Account" aspcontroller="Logout">
-                            <input type="submit" value="Logout" />
-                        </form>
+                        <div class="card-header">Tipo Usuario: @ViewData["UserType"] </div>
+                        <div class="card-group">
+                            <div class="card-body">Bienvenido: @ViewData["UserName"] </div>
+                            <div class="card-footer">
+                                <form method="post" asp-controller="Account" aspcontroller="Logout">
+                                    <input type="submit" value="Logout" />
+                                </form>
+                            </div>
+                        </div>
                     }
                     else
                     {
@@ -48,6 +53,9 @@
                         //<a asp-controller="Account" asp-action="Register">Register</a>
                     }
                 </div>*@
+                @{
+                    await Html.RenderPartialAsync("_LoginPartial");
+                }
             </div>
         </nav>
     </header>
@@ -57,7 +65,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted align-content-center">
         <div class="container">
             &copy; 2022 - AppCenfoMusica.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
