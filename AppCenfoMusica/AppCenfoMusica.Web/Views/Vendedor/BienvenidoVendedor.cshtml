@@ -1,18 +1,15 @@
 ﻿@model AppCenfoMusica.Web.ViewModels.GestionVendedoresVM
 
 @{
-    ViewData["Title"] = "BuscarVendedorPorID";
+    ViewData["Title"] = "Bienvenido Vendedor";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Detalle del Vendedor</h1>
+<h1>Bienvenido, @Model.Vendedor.NombreUsuario</h1>
+<h4>Hora de ingreso: @System.DateTime.Now</h4>
 <br />
 @if (Model.Error == null)
 {
-    if (ViewBag.Accion != null)
-    {
-        <div class="alert alert-success">@ViewBag.Accion</div>
-    }
     @if (ViewBag.TipoVendedor != null)
     {
         <div class="alert alert-info">@ViewBag.TipoVendedor</div>
@@ -21,7 +18,6 @@
     {
         <div class="alert alert-info">@ViewData["EstadoVendedor"]</div>
     }
-
     <div class="card">
         <div class="card-header">
             <b>@Model.Vendedor.Nombre</b>

@@ -3,13 +3,21 @@ using AppCenfoMusica.Logica;
 using AppCenfoMusica.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 
 namespace AppCenfoMusica.Web.Controllers
 {
     public class ProductoController : Controller
     {
-        public IActionResult BuscarProductoPorId(int id)
+        public IActionResult BuscarProductoPorId(int id, string? accion)
         {
+            if (HttpContext.Session.GetString("UserName") == null ||
+                (HttpContext.Session.GetString("UserType") != "Vendedor" &&
+                HttpContext.Session.GetString("UserType") != "Cliente"))
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Vendedor/ListarVendedores" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
             GestionProductosVM model = new GestionProductosVM();
 
             ViewBag.ProductosBodega = HttpContext.Session.GetString("TotalProductos");
@@ -20,6 +28,10 @@ namespace AppCenfoMusica.Web.Controllers
             {
                 //Respuesta positiva
                 model.Producto = (ProductoDTO)resultado;
+                if (accion == "guardar")
+                {
+                    ViewBag.Accion = "El vendedor se almacenó correctamente";
+                }
             }
             else
             {
@@ -80,10 +92,21 @@ namespace AppCenfoMusica.Web.Controllers
             return View(model);
         }
 
-        public ActionResult ListarProductos()
+        public ActionResult ListarProductos(string? ordenamiento, int? paginaActual)
         {
+            if (HttpContext.Session.GetString("UserName") == null ||
+                (HttpContext.Session.GetString("UserType") != "Vendedor" &&
+                HttpContext.Session.GetString("UserType") != "Cliente"))
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Vendedor/ListarVendedores" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
+
             ViewData["UserName"] = HttpContext.Session.GetString("UserName");
             ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
+            int pagina = paginaActual ?? 1;
+
             GestionProductosVM model = new GestionProductosVM();
 
             // Define la conexión con nuestros servicios
@@ -112,12 +135,46 @@ namespace AppCenfoMusica.Web.Controllers
 
             var resultado = JsonConvert.DeserializeObject<List<BaseDTO>>(datos, configuracion);
 
-            if (resultado.ElementAt(0).IdEntidad > 0)
+            //if (resultado.ElementAt(0).IdEntidad > 0)
+            if (resultado.ElementAt(0).GetType() != typeof(ErrorDTO))
             {
                 //respuesta positiva
                 var resultadoProducto = JsonConvert.DeserializeObject<List<ProductoDTO>>(datos);
 
-                model.ListaProductos = resultadoProducto;
+                //model.ListaProductos = resultadoProducto;
+
+                model.ListaProductos = resultadoProducto.OfType<ProductoDTO>().ToList();
+
+                if (ordenamiento != null)
+                {
+                    switch (ordenamiento)
+                    {
+                        case "Nombre":
+                            model.ListaProductos = model.ListaProductos.OrderBy(O => O.Nombre).ToList();
+                            break;
+                        case "Tipo":
+                            model.ListaProductos = model.ListaProductos.OrderBy(O => O.TipoProducto).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                ViewBag.TotalProductos = model.ListaProductos.Count;
+
+                if (ViewBag.TotalProductos > 10)
+                {
+                    ViewBag.TotalPaginas = (int)Math.Ceiling((double)ViewBag.totalProductos / 10);
+
+                    if (pagina < ViewBag.TotalPaginas)
+                    {
+                        model.ListaProductos = model.ListaProductos.GetRange((pagina - 1) * 10, 10);
+                    }
+                    else
+                    {
+                        model.ListaProductos = model.ListaProductos.GetRange((pagina - 1) * 10, ViewBag.TotalProductos - ((pagina - 1) * 10));
+                    }
+                }
 
                 var valorTotalProductos = model.ListaProductos.Sum(P => P.PrecioUnitario);
 
@@ -133,6 +190,7 @@ namespace AppCenfoMusica.Web.Controllers
                 ViewBag.PreciosTotales = valorTotalProductos;
 
                 ViewData["TotalProductos"] = totalProductosBodega;
+
             }
             else
             {
@@ -152,6 +210,13 @@ namespace AppCenfoMusica.Web.Controllers
         //GET: Únicamente nos va a mostrar el View (a menos que necesitemos configurar alguna cuestión adicional)
         public ActionResult AgregarProducto()
         {
+            if (HttpContext.Session.GetString("UserName") == null ||
+                (HttpContext.Session.GetString("UserType") != "Vendedor" &&
+                HttpContext.Session.GetString("UserType") != "Cliente"))
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Vendedor/ListarVendedores" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
             ViewBag.PreciosTotales = HttpContext.Session.GetString("PreciosTotales");
 
             ViewData["TotalProductos"] = HttpContext.Session.GetString("TotalProductos");
@@ -205,6 +270,40 @@ namespace AppCenfoMusica.Web.Controllers
                     return View();
                 }
             }
+        }
+
+        private void IncluirProductoCarrito(GestionProductosVM model, int contadorProductos)
+        {
+            HttpContext.Session.SetInt32("CantidadProductos", Convert.ToInt32(contadorProductos));
+            HttpContext.Session.SetInt32("Producto" + contadorProductos, model.Producto.IdEntidad);
+            HttpContext.Session.SetInt32("CantidadProducto" + contadorProductos, model.CantidadXProducto);
+            HttpContext.Session.SetString("CantidadProductosCarrito", "Hay " + HttpContext.Session.GetInt32("CantidadProductos") + " productos en el carrito");
+        }
+
+        public ActionResult EliminarProductoCarrito(int id)
+        {
+            int? contadorProductos = HttpContext.Session.GetInt32("CantidadProductos") - 1;
+            HttpContext.Session.Remove("Producto" + id);
+            HttpContext.Session.Remove("CantidadProducto" + id);
+            HttpContext.Session.SetInt32("CantidadProductos", Convert.ToInt32(contadorProductos));
+            HttpContext.Session.SetString("CantidadProductosCarrito", "Hay " + HttpContext.Session.GetInt32("CantidadProductos") + " productos en el carrito");
+
+            return RedirectToAction("ContenidoCarritoCompras");
+        }
+
+        public ActionResult LimpiarSesion()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("ListarProductos");
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EliminarProducto(IFormCollection form)
+        {
+            var idProducto = form["idProducto"];
+            return View();
         }
     }
 }

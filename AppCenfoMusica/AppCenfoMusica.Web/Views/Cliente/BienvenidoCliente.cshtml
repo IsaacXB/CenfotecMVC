@@ -5,20 +5,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Detalle de Cliente</h1>
+<h1>Bienvenido, @Model.Cliente.NombreUsuario</h1>
+<h4>Hora de ingreso: @System.DateTime.Now</h4>
 <br />
 @if (Model.Error == null)
 {
-    if (ViewBag.Accion != null)
-    {
-        <div class="alert alert-success">@ViewBag.Accion</div>
-    }
     if (ViewBag.TipoCliente != null)
     {
         <div class="alert alert-info">@ViewBag.TipoCliente</div>
 
     }
-
+    if (ViewBag.Accion != null)
+    {
+        <div class="alert alert-success">@ViewBag.Accion</div>
+    }
     <br />
     <div class="card">
         <div class="card-header">

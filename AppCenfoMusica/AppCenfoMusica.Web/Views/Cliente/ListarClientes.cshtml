@@ -11,6 +11,10 @@
 <p>
     <a asp-action="AgregarCliente" class="btn btn-success">Agregar Cliente</a>
 </p>
+@if (ViewBag.Accion != null)
+{
+    <div class="alert alert-success">@ViewBag.Accion</div>
+}
 <table class="table">
     <thead>
         <tr>
@@ -38,7 +42,7 @@
                         @Html.ActionLink("Editar Datos", "EditarDatos", new {  id=item.IdEntidad }, new { @class = "btn btn-outline-primary" })
 
                         @Html.ActionLink("Detalles", "BuscarClientePorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
-                        @Html.ActionLink("Eliminar", "Eliminar", new { id=item.IdEntidad }, new { @class = "btn btn-outline-danger" })
+                        @Html.ActionLink("Eliminar", "EliminarCliente", new { id=item.IdEntidad }, new { @class = "btn btn-outline-danger" })
                     </div>
                 </td>
             </tr>

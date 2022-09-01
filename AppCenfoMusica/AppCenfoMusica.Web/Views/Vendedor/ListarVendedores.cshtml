@@ -1,4 +1,5 @@
-﻿@model AppCenfoMusica.Web.ViewModels.GestionVendedoresVM
+﻿@using AppCenfoMusica.DTO
+@model AppCenfoMusica.Web.ViewModels.GestionVendedoresVM
 
 @{
     ViewData["Title"] = "ListarVendedor";
@@ -11,6 +12,10 @@
 <p>
     <a asp-action="AgregarVendedor" class="btn btn-success">Agregar Vendedor</a>
 </p>
+@if (ViewBag.Accion != null)
+{
+    <div class="alert alert-success">@ViewBag.Accion</div>
+}
 <table class="table">
     <thead>
         <tr>
@@ -36,7 +41,7 @@
                     <div class="btn-group">
                         @Html.ActionLink("Editar Estado", "EditarEstado", new {  id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
                         @Html.ActionLink("Detalles", "BuscarVendedorPorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
-                        @Html.ActionLink("Eliminar", "Eliminar", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-danger" })
+                        @Html.ActionLink("Eliminar", "EliminarVendedor", (VendedorDTO)item, new { @class = "btn btn-outline-danger" })
                     </div>
                 </td>
             </tr>

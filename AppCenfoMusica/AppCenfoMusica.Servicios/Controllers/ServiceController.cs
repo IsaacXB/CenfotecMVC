@@ -138,6 +138,7 @@ namespace AppCenfoMusica.Servicios.Controllers
                 return (ErrorDTO)resultado;
             }
         }
+
         //Get: api/Service/AgregarClienteParametros/
         [HttpPost("AgregarClienteParametros")]
         public BaseDTO AgregarClienteParametros(string nombre, string email, string nomUsuario, string contrasena,
@@ -179,6 +180,22 @@ namespace AppCenfoMusica.Servicios.Controllers
             if (resultado.GetType() != typeof(ErrorDTO))
             {
                 return (ClienteDTO)resultado;
+            }
+            else
+            {
+                return (ErrorDTO)resultado;
+            }
+        }
+
+        //Get: api/Service/EliminarCliente
+        [HttpGet("EliminarCliente")]
+        public BaseDTO EliminarCliente(ClienteDTO clienteDTO)
+        {
+            var resultado = new ClienteLogica().EliminarCliente(clienteDTO);
+
+            if (resultado.GetType() != typeof(ErrorDTO))
+            {
+                return (BaseDTO)resultado;
             }
             else
             {
@@ -293,6 +310,22 @@ namespace AppCenfoMusica.Servicios.Controllers
             if (resultado.GetType() != typeof(ErrorDTO))
             {
                 return (VendedorDTO)resultado;
+            }
+            else
+            {
+                return (ErrorDTO)resultado;
+            }
+        }
+
+        //Get: api/Service/EliminarVendedor
+        [HttpGet("EliminarVendedor")]
+        public BaseDTO EliminarVendedor(VendedorDTO vendedorDTO)
+        {
+            var resultado = new VendedorLogica().EliminarVendedor(vendedorDTO);
+
+            if (resultado.GetType() != typeof(ErrorDTO))
+            {
+                return (BaseDTO)resultado;
             }
             else
             {

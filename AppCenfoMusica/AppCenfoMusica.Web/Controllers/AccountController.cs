@@ -27,6 +27,15 @@ namespace AppCenfoMusica.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            ViewBag.UserName = string.Empty;
+            HttpContext.Session.Remove("UserName");
+            HttpContext.Session.Remove("UserType");
+            return RedirectToAction("Index", "Home", "Home");
+        }
+
         //[HttpPost]
         //public async Task<IActionResult> Logout()
         //{
@@ -56,7 +65,7 @@ namespace AppCenfoMusica.Web.Controllers
 
                     HttpContext.Session.SetString("UserName", model.Username);
                     HttpContext.Session.SetString("UserType", model.UserType);
-                    return RedirectToAction("ListarVendedores", "Vendedor");
+                    return RedirectToAction("BienvenidoVendedor", "Vendedor", new { id = resultado.IdEntidad});
                 }
                 else
                 {
@@ -85,7 +94,7 @@ namespace AppCenfoMusica.Web.Controllers
                     ViewData["UserName"] = model.Username;
                     HttpContext.Session.SetString("UserName", model.Username);
                     HttpContext.Session.SetString("UserType", model.UserType);
-                    return RedirectToAction("ListarClientes", "Cliente");
+                    return RedirectToAction("BienvenidoCliente", "Cliente", new { id = resultado.IdEntidad });
                 }
                 else
                 {

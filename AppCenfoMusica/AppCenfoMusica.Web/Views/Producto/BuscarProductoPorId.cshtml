@@ -7,15 +7,21 @@
 
 <h1>Detalle de producto</h1>
 <br />
-<h4>@ViewBag.ProductosBodega</h4>
-<h5>@ViewData["TotalProductos"]</h5>
-<br />
 @if (Model.Error == null)
 {
     if (ViewBag.Accion != null)
     {
         <div class="alert alert-success">@ViewBag.Accion</div>
     }
+    if (ViewBag.ProductosBodega != null)
+    {
+        <h4>@ViewBag.ProductosBodega</h4>
+    }
+    if (ViewData["TotalProductos"] != null)
+    {
+        <h5>@ViewData["TotalProductos"]</h5>
+    }
+
     <br />
     <form asp-action="BuscarProductoPorID">
     <div class="card">
@@ -74,7 +80,7 @@
     </form>
     <div class="btn-group">
         <a class="btn btn-outline-info" asp-action="ListarProductos">Regresar</a>
-        @Html.ActionLink("Editar", "Edit", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-outline-info" })
+        @Html.ActionLink("Editar", "ActualizarProducto", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-outline-info" })
         <a class="btn btn-outline-info" href="#">Agregar al carrito</a>
     </div>
 }

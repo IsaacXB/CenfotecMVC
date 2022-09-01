@@ -32,8 +32,43 @@ namespace AppCenfoMusica.Web.Controllers
 
                 if (accion == "guardar")
                 {
-                    ViewBag.Accion = "El producto se almacenó correctamente";
+                    ViewBag.Accion = "El cliente se almacenó correctamente";
                 }
+                else if (accion == "eliminar")
+                {
+                    ViewBag.Accion = "El cliente se elimino correctamente";
+                }
+
+                ViewBag.TipoCliente = "Estado Cliente: " + SetEstadoCliente(model.Cliente.Estado);
+            }
+            else
+            {
+                //Respuesta negativa
+                model.Error = (ErrorDTO)resultado;
+            }
+
+            return View(model);
+
+        }
+
+        public IActionResult BienvenidoCliente(int id)
+        {
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Cliente/BienvenidoCliente" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
+            GestionClientesVM model = new GestionClientesVM();
+
+            var resultado = new ClienteLogica().BuscarClientePorID(id);
+
+            if (resultado.GetType() != typeof(ErrorDTO))
+            {
+                //Respuesta positiva
+                model.Cliente = (ClienteDTO)resultado;
 
                 ViewBag.TipoCliente = "Estado Cliente: " + SetEstadoCliente(model.Cliente.Estado);
             }
@@ -382,6 +417,64 @@ namespace AppCenfoMusica.Web.Controllers
                             var respuesta = JsonConvert.DeserializeObject<ClienteDTO>(datos, configuracion);
 
                             return RedirectToAction("BuscarClientePorID", new { id = respuesta.IdEntidad, accion = "guardar" });
+                            //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
+                        }
+                        else
+                        {
+                            var respuesta = JsonConvert.DeserializeObject<ErrorDTO>(datos);
+                            ModelState.AddModelError("ErrorProgramacion", respuesta.MensajeError);
+                            throw new Exception("ErrorProgramacion");
+                        }
+                    }
+                }
+
+            }
+            catch (Exception error)
+            {
+                if (error.Message == "ErrorProgramacion")
+                {
+                    return View(model);
+                }
+                else
+                {
+                    ModelState.AddModelError("ErrorSistema", "Ocurrió un error inesperado, favor ponerse en contacto con el personal autorizado");
+                    //almacenamiento en bitácroa que guarde efectivamente el texto del error
+                    return View(model);
+                }
+            }
+            return View(model);
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EliminarCliente(ClienteDTO model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var cliente = new HttpClient())
+                    {
+                        cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
+
+                        var tarea = cliente.PostAsJsonAsync<ClienteDTO>("EliminarCliente", model);
+
+                        tarea.Wait();
+
+                        var resultado = tarea.Result;
+
+                        var datos = resultado.Content.ReadAsStringAsync().Result;
+
+                        if (!datos.Contains("Error"))
+                        {
+                            JsonSerializerSettings configuracion = new JsonSerializerSettings
+                            {
+                                TypeNameHandling = TypeNameHandling.All
+                            };
+                            var respuesta = JsonConvert.DeserializeObject<ClienteDTO>(datos, configuracion);
+
+                            return RedirectToAction("ListarClientes", new {  accion = "eliminar" });
                             //return Content("<div><h4>¡Operación exitosa!</h4><br /><div>Se insertó el nuevo producto con el nombre" + respuesta.Nombre + "</div></div>","text/html");
                         }
                         else
