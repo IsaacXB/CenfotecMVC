@@ -34,7 +34,7 @@ namespace AppCenfoMusica.Web.Controllers
                 model.Producto = (ProductoDTO)resultado;
                 if (accion == "guardar")
                 {
-                    ViewBag.Accion = "El vendedor se almacenó correctamente";
+                    ViewBag.Accion = "El producto se almacenó correctamente";
                 }
             }
             else
@@ -96,6 +96,9 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult ProductosAdicionales()
         {
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
             GestionProductosVM model = new GestionProductosVM();
 
             //Tenemos que definir la conexión con nuestros servicios
@@ -270,6 +273,9 @@ namespace AppCenfoMusica.Web.Controllers
                 var logingVM = new LoginVM() { ReturnUrl = "Vendedor/ListarVendedores" };
                 return RedirectToAction("Login", "Account", logingVM);
             }
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
             ViewBag.PreciosTotales = HttpContext.Session.GetString("PreciosTotales");
 
             ViewData["TotalProductos"] = HttpContext.Session.GetString("TotalProductos");
@@ -283,6 +289,8 @@ namespace AppCenfoMusica.Web.Controllers
         {
             try
             {
+                ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                ViewData["UserType"] = HttpContext.Session.GetString("UserType");
                 using (var cliente = new HttpClient())
                 {
                     cliente.BaseAddress = new Uri("https://localhost:7257/api/Service/");
@@ -327,6 +335,8 @@ namespace AppCenfoMusica.Web.Controllers
 
         private void IncluirProductoCarrito(GestionProductosVM model, int contadorProductos)
         {
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             HttpContext.Session.SetInt32("CantidadProductos", Convert.ToInt32(contadorProductos));
             HttpContext.Session.SetInt32("Producto" + contadorProductos, model.Producto.IdEntidad);
             HttpContext.Session.SetInt32("CantidadProducto" + contadorProductos, model.CantidadXProducto);
@@ -335,6 +345,8 @@ namespace AppCenfoMusica.Web.Controllers
 
         public ActionResult EliminarProductoCarrito(int id)
         {
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             int? contadorProductos = HttpContext.Session.GetInt32("CantidadProductos") - 1;
             HttpContext.Session.Remove("Producto" + id);
             HttpContext.Session.Remove("CantidadProducto" + id);
@@ -347,6 +359,8 @@ namespace AppCenfoMusica.Web.Controllers
         public ActionResult LimpiarSesion()
         {
             HttpContext.Session.Clear();
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             return RedirectToAction("ListarProductos");
         }
 
@@ -356,6 +370,8 @@ namespace AppCenfoMusica.Web.Controllers
         public ActionResult EliminarProducto(IFormCollection form)
         {
             var idProducto = form["idProducto"];
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
             return View();
         }
     }

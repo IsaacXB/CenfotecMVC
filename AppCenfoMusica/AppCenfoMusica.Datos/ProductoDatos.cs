@@ -254,7 +254,7 @@ namespace AppCenfoMusica.Datos
 
                 if (contexto.SaveChanges() > 0)
                 {
-                    return new RespuestaDTO { Codigo = 1, Contenido = producto };
+                    return new RespuestaDTO { Codigo = 1, Contenido = (Producto)producto.Contenido };
                 }
                 else
                 {
