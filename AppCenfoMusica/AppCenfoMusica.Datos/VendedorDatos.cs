@@ -484,7 +484,7 @@ namespace AppCenfoMusica.Datos
                         return new RespuestaDTO
                         {
                             Codigo = 1,
-                            Contenido = new BaseDTO { Mensaje = "El cliente se elimino satisfacoriamente" }
+                            Contenido = new BaseDTO { Mensaje = "El vendedor se elimino satisfacoriamente" }
                         };
                     }
                 }

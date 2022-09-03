@@ -20,7 +20,20 @@ namespace AppCenfoMusica.Web.Controllers
         [HttpGet]
         public ActionResult Login(string returnUrl = "Home/Index")
         {
-            string userType = returnUrl.Contains("Cliente") ? "Cliente" : "Vendedor";
+            string userType = string.Empty;
+
+            if (returnUrl.Contains("Cliente"))
+            {
+                userType = "Cliente";
+            }
+            else if (returnUrl.Contains("Vendedor"))
+            {
+                userType = "Vendedor";
+            }
+            else if (returnUrl.Contains("Home") || returnUrl.Contains("Producto"))
+            {
+                userType = "Home";
+            }
 
             var model = new LoginVM { ReturnUrl = returnUrl, UserType = userType };
    
@@ -46,7 +59,7 @@ namespace AppCenfoMusica.Web.Controllers
         [HttpPost]
         public IActionResult Login(LoginVM model)
         {
-            string userType = model.ReturnUrl.Contains("Cliente") ? "Cliente" : "Vendedor";
+            string userType = model.UserType;
             model.UserType = userType;
 
             if (model.UserType == "Vendedor")
@@ -65,7 +78,7 @@ namespace AppCenfoMusica.Web.Controllers
 
                     HttpContext.Session.SetString("UserName", model.Username);
                     HttpContext.Session.SetString("UserType", model.UserType);
-                    return RedirectToAction("BienvenidoVendedor", "Vendedor", new { id = resultado.IdEntidad});
+                    return RedirectToAction("BienvenidoVendedor", "Vendedor", new { id = resultado.IdEntidad });
                 }
                 else
                 {
@@ -110,6 +123,59 @@ namespace AppCenfoMusica.Web.Controllers
 
                 return View(model);
 
+            }
+            else if (model.UserType == "Home")
+            {
+                var resultado = new VendedorLogica().ValidarVendedor(model.Username, model.Password);
+
+                if (resultado.GetType() != typeof(ErrorDTO))
+                {
+                    //Respuesta positiva
+                    model.IsAuthenticated = true;
+
+                    ViewBag.IsAuthenticated = true;
+                    ViewBag.UserName = model.Username;
+                    ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                    ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
+                    model.UserType = "Vendedor";
+                    HttpContext.Session.SetString("UserName", model.Username);
+                    HttpContext.Session.SetString("UserType", model.UserType);
+                    return RedirectToAction("BienvenidoVendedor", "Vendedor", new { id = resultado.IdEntidad });
+                }
+                else
+                {
+                    resultado = new ClienteLogica().ValidarCliente(model.Username, model.Password);
+
+                    if (resultado.GetType() != typeof(ErrorDTO))
+                    {
+                        //Respuesta positiva
+                        model.IsAuthenticated = true;
+
+                        ViewBag.IsAuthenticated = true;
+                        ViewBag.UserName = model.Username;
+                        ViewData["UserName"] = model.Username;
+                        model.UserType = "Cliente";
+                        HttpContext.Session.SetString("UserName", model.Username);
+                        HttpContext.Session.SetString("UserType", model.UserType);
+                        return RedirectToAction("BienvenidoCliente", "Cliente", new { id = resultado.IdEntidad });
+
+                    }
+
+                    return View(model);
+                }
+
+                if (resultado.GetType() == typeof(ErrorDTO))
+                {
+                    //Respuesta negativa
+                    model.IsAuthenticated = false;
+                    ViewBag.UserName = string.Empty;
+                    ViewData["UserName"] = string.Empty;
+                    HttpContext.Session.Remove("UserName");
+                    HttpContext.Session.Remove("UserType");
+                    ModelState.AddModelError("", "Usuario o contraseña invalida.");
+
+                }
             }
             ModelState.AddModelError("", "Error al intentar hacer login.");
             return View(model);

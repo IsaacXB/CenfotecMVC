@@ -7,6 +7,7 @@
 
 <h1>Listado total de productos</h1>
 <br />
+
 @{
     await Html.RenderPartialAsync("_DatosStock");
 }
@@ -16,10 +17,13 @@
 <div class="alert alert-info">
     <b>Total de productos en bodega: </b> @ViewData["TotalProductos"]
 </div>*@
+@if (ViewBag.UserType == "Vendedor")
+{
+    <p>
+        <a asp-action="AgregarProducto" class="btn btn-success">Agregar producto</a>
+    </p>
+}
 
-<p>
-    <a asp-action="AgregarProducto" class="btn btn-success">Agregar producto</a>
-</p>
 <table class="table">
     <thead>
         <tr>

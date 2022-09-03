@@ -2,17 +2,17 @@
 
 
 @{
-    ViewData["Title"] = "Editar Vendedor";
+    ViewData["Title"] = "Eliminar Vendedor";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Editar Vendedor</h1>
+<h1>Está seguro que desea eliminar al vendedor?</h1>
 <br />
                 @if (ViewBag.UserType == "Vendedor")
 {
     @using (Html.BeginForm())
     {
-        <form asp-action="Editar">
+        <form asp-action="EliminarVendedor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @Html.HiddenFor(model => model.IdEntidad)
             @Html.HiddenFor(model => model.Nombre)
@@ -20,6 +20,8 @@
             @Html.HiddenFor(model => model.Cedula)
             @Html.HiddenFor(model => model.Puesto)
             @Html.HiddenFor(model => model.Contrasena)
+            @Html.HiddenFor(model => model.Estado)
+
 
             @if (ViewBag.TipoVendedor != null)
             {
@@ -64,12 +66,12 @@
                                 @Html.DisplayNameFor(model => model.Estado)
                             </td>
                             <td>
-                                @Html.TextBoxFor(model => model.Estado)
+                                @Model.Estado
                             </td>
                         </tr>
                     </table>
                     <div class="form-group">
-                        <input type="submit" value="Editar" class="btn btn-primary" name="Actualizar"/>
+                        <input type="submit" value="Eliminar Vendedor" class="btn btn-primary" name="EliminarVendedor" />
                     </div>
                 </div>
             </div>

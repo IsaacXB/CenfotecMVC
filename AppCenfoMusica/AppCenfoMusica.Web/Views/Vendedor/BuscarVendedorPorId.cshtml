@@ -66,7 +66,10 @@
     <br />
     <div class="btn-group">
         <a class="btn btn-outline-info" asp-action="ListarVendedores">Regresar</a>
-        @Html.ActionLink("Editar Estado", "EditarEstado", new {  id = Model.Vendedor.IdEntidad  }, new { @class = "btn btn-outline-info" })
+        @if (ViewBag.UserType == "Vendedor")
+        {
+            @Html.ActionLink("Editar Estado", "EditarEstado", new {  id = Model.Vendedor.IdEntidad  }, new { @class = "btn btn-outline-info" })
+        }
     </div>
 }
 else

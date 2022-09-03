@@ -18,6 +18,10 @@ namespace AppCenfoMusica.Web.Controllers
                 var logingVM = new LoginVM() { ReturnUrl = "Vendedor/ListarVendedores" };
                 return RedirectToAction("Login", "Account", logingVM);
             }
+
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
             GestionProductosVM model = new GestionProductosVM();
 
             ViewBag.ProductosBodega = HttpContext.Session.GetString("TotalProductos");
@@ -39,6 +43,55 @@ namespace AppCenfoMusica.Web.Controllers
                 model.Error = (ErrorDTO)resultado;
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult BuscarProductoPorID(GestionProductosVM model)
+        {
+            try
+            {
+                if (HttpContext.Session.GetString("UserName") == null ||
+                    (HttpContext.Session.GetString("UserType") != "Vendedor" &&
+                    HttpContext.Session.GetString("UserType") != "Cliente"))
+                {
+                    var logingVM = new LoginVM() { ReturnUrl = "Vendedor/ListarVendedores" };
+                    return RedirectToAction("Login", "Account", logingVM);
+                }
+
+                ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
+
+                //Lo que vamos a hacer al momento de construir este método de tipo post, es almacenar los productos y sus cantidades en variables de sesión, para que podamos preservar
+                // su información, hacia el carrito de compras
+                if (HttpContext.Session.GetInt32("CantidadProductos") != null)
+                {
+                    //Aquí voy a llenar un producto adicional a los ya existentes
+                    if (HttpContext.Session.GetInt32("CantidadProductos") > 0)
+                    {
+                        int? contadorProductos = HttpContext.Session.GetInt32("CantidadProductos") + 1;
+                        IncluirProductoCarrito(model, Convert.ToInt32(contadorProductos));
+                    }
+                    else
+                    {
+                        //Aquí voy a incluir el primer producto del carrito
+                        IncluirProductoCarrito(model, 1);
+                    }
+                }
+                else
+                {
+                    //Aquí voy a incluir el primer producto del carrito
+                    IncluirProductoCarrito(model, 1);
+                }
+                ViewBag.Mensaje = "Se insertó el producto en el carrito exitosamente. " + HttpContext.Session.GetString("CantidadProductosCarrito");
+                return View(model);
+            }
+            catch (Exception error)
+            {
+                ViewBag.MensajeError = "Error: " + error.Message;
+                return View(model);
+            }
         }
 
         public ActionResult ProductosAdicionales()

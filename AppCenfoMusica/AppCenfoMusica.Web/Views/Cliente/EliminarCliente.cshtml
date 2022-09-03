@@ -1,25 +1,29 @@
-﻿@model AppCenfoMusica.DTO.VendedorDTO
-
+﻿@model AppCenfoMusica.DTO.ClienteDTO
 
 @{
-    ViewData["Title"] = "Editar Vendedor";
+    ViewData["Title"] = "Eliminar Cliente";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Editar Vendedor</h1>
-<br />
-                @if (ViewBag.UserType == "Vendedor")
+<h1>Eliminar Cliente</h1>
+
+<h4>Está seguro que desea eliminar al vendedor?</h4>
+<hr />
+@if (ViewBag.UserType == "Vendedor")
 {
     @using (Html.BeginForm())
     {
-        <form asp-action="Editar">
+        <form asp-action="EliminarCliente">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @Html.HiddenFor(model => model.IdEntidad)
             @Html.HiddenFor(model => model.Nombre)
             @Html.HiddenFor(model => model.NombreUsuario)
             @Html.HiddenFor(model => model.Cedula)
-            @Html.HiddenFor(model => model.Puesto)
             @Html.HiddenFor(model => model.Contrasena)
+            @Html.HiddenFor(model => model.Estado)
+            @Html.HiddenFor(model => model.Email)
+            @Html.HiddenFor(model => model.Sexo)
+
 
             @if (ViewBag.TipoVendedor != null)
             {
@@ -64,20 +68,27 @@
                                 @Html.DisplayNameFor(model => model.Estado)
                             </td>
                             <td>
-                                @Html.TextBoxFor(model => model.Estado)
+                                @Model.Estado
                             </td>
                         </tr>
                     </table>
                     <div class="form-group">
-                        <input type="submit" value="Editar" class="btn btn-primary" name="Actualizar"/>
+                        <input type="submit" value="Eliminar Cliente" class="btn btn-primary" name="EliminarCliente" />
                     </div>
                 </div>
             </div>
         </form>
         <br />
         <div class="btn-group">
-            <a class="btn btn-outline-info" asp-action="ListarVendedores">Regresar</a>
+            <a class="btn btn-outline-info" asp-action="ListarClientes">Regresar</a>
         </div>
     }
-
+    <div>
+        <a asp-action="ListarClientes">Back to List</a>
+    </div>
 }
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

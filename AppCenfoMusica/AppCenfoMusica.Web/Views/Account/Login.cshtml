@@ -37,7 +37,11 @@
     <div class="list-group">
         <div>Uusario No registrado</div>
         <div class="btn-group">
+
+        @if(ViewBag.UserType == "Vendedor")
+        {
             @Html.ActionLink("Registrar Cliente","AgregarCliente", "Cliente", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-outline-primary" })
+        }
             @Html.ActionLink("Registrar Vendedor","AgregarVendedor", "Vendedor", new {/* id=item.IdEntidad */ }, new { @class = "btn btn-outline-primary" })
         </div>
     </div>

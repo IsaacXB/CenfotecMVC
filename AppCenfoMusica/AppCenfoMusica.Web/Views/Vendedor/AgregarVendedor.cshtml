@@ -9,7 +9,9 @@
 @*
 <h4>Vendedor</h4>
 <hr />*@
-@using (Html.BeginForm()) { 
+
+@using (Html.BeginForm())
+{
     <div class="row">
         <div class="col-md-4">
             <form asp-action="AgregarVendedor">
@@ -55,6 +57,7 @@
 <div>
     <a asp-action="ListarVendedores">Back to List</a>
 </div>
+
 
 @section Scripts {
     @{

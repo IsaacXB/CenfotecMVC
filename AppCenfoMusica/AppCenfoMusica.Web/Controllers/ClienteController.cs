@@ -13,7 +13,8 @@ namespace AppCenfoMusica.Web.Controllers
     {
         public IActionResult BuscarClientePorId(int id, string? accion)
         {
-            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            if (HttpContext.Session.GetString("UserName") == null || (HttpContext.Session.GetString("UserType") != "Cliente"
+                && HttpContext.Session.GetString("UserType") != "Vendedor"))
             {
                 var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
                 return RedirectToAction("Login", "Account", logingVM);
@@ -82,9 +83,10 @@ namespace AppCenfoMusica.Web.Controllers
 
         }
 
-        public ActionResult ListarClientes()
+        public ActionResult ListarClientes(string? accion)
         {
-            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            if (HttpContext.Session.GetString("UserName") == null || (HttpContext.Session.GetString("UserType") != "Cliente"
+                && HttpContext.Session.GetString("UserType") != "Vendedor"))
             {
                 var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
                 return RedirectToAction("Login", "Account", logingVM);
@@ -92,6 +94,14 @@ namespace AppCenfoMusica.Web.Controllers
             ViewData["UserName"] = HttpContext.Session.GetString("UserName");
             ViewData["UserType"] = HttpContext.Session.GetString("UserType");
 
+            if (accion == "guardar")
+            {
+                ViewBag.Accion = "El vendedor se almacenó correctamente";
+            }
+            else if (accion == "eliminar")
+            {
+                ViewBag.Accion = "El vendedor se elimino correctamente";
+            }
 
             GestionClientesVM model = new GestionClientesVM();
 
@@ -156,6 +166,16 @@ namespace AppCenfoMusica.Web.Controllers
         {
             try
             {
+                if (HttpContext.Session.GetString("UserName") == null ||
+                    (HttpContext.Session.GetString("UserType") != "Cliente" &&
+                    HttpContext.Session.GetString("UserType") != "Vendedor"))
+                {
+                    var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                    return RedirectToAction("Login", "Account", logingVM);
+                }
+                ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
                 if (ModelState.IsValid)
                 {
                     using (var cliente = new HttpClient())
@@ -211,7 +231,7 @@ namespace AppCenfoMusica.Web.Controllers
         [HttpGet]
         public ActionResult EditarEstado(int id)
         {
-            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Vendedor" )
             {
                 var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
                 return RedirectToAction("Login", "Account", logingVM);
@@ -275,6 +295,14 @@ namespace AppCenfoMusica.Web.Controllers
         {
             try
             {
+                if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Vendedor")
+                {
+                    var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                    return RedirectToAction("Login", "Account", logingVM);
+                }
+                ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
                 if (ModelState.IsValid)
                 {
                     using (var cliente = new HttpClient())
@@ -329,7 +357,7 @@ namespace AppCenfoMusica.Web.Controllers
         [HttpGet]
         public ActionResult EditarDatos(int id)
         {
-            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Cliente")
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Vendedor")
             {
                 var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
                 return RedirectToAction("Login", "Account", logingVM);
@@ -394,6 +422,14 @@ namespace AppCenfoMusica.Web.Controllers
         {
             try
             {
+                if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Vendedor")
+                {
+                    var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                    return RedirectToAction("Login", "Account", logingVM);
+                }
+                ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
                 if (ModelState.IsValid)
                 {
                     using (var cliente = new HttpClient())
@@ -445,6 +481,67 @@ namespace AppCenfoMusica.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult EliminarCliente(int id)
+        {
+            if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Vendedor")
+            {
+                var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                return RedirectToAction("Login", "Account", logingVM);
+            }
+            ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+            ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
+            GestionClientesVM model = new GestionClientesVM();
+
+            // Define la conexión con nuestros servicios
+            var url = "https://localhost:7257/api/Service/BuscarClientePorId/" + id.ToString();
+
+            // Consulta al servicio
+            var webrequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
+
+            string datos = "";
+
+            //Se almacena la respuesta a la consulta
+            using (var respuesta = webrequest.GetResponse())
+            {
+                //Se determina un lector general
+                using (var reader = new StreamReader(respuesta.GetResponseStream()))
+                {
+                    var resultadoLecutra = reader.ReadToEnd();
+                    datos = resultadoLecutra.ToString();
+                }
+            }
+            JsonSerializerSettings configuracion = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
+
+            var resultado = JsonConvert.DeserializeObject<BaseDTO>(datos, configuracion);
+
+            if (resultado.IdEntidad > 0)
+            {
+                //respuesta positiva
+                var resultadoVendedor = JsonConvert.DeserializeObject<ClienteDTO>(datos);
+
+                model.Cliente = resultadoVendedor;
+
+
+                ViewBag.TipoCliente = "Estado Cliente: " + SetEstadoCliente(model.Cliente.Estado);
+
+                return View(resultadoVendedor);
+            }
+            else
+            {
+                //respuesta negativa
+                var resultadoError = JsonConvert.DeserializeObject<List<ErrorDTO>>(datos);
+
+                model.Error = (ErrorDTO)resultadoError.ElementAt(0);
+            }
+            return View(model);
+
+        }
+
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -452,6 +549,14 @@ namespace AppCenfoMusica.Web.Controllers
         {
             try
             {
+                if (HttpContext.Session.GetString("UserName") == null || HttpContext.Session.GetString("UserType") != "Vendedor")
+                {
+                    var logingVM = new LoginVM() { ReturnUrl = "Cliente/ListarClientes" };
+                    return RedirectToAction("Login", "Account", logingVM);
+                }
+                ViewData["UserName"] = HttpContext.Session.GetString("UserName");
+                ViewData["UserType"] = HttpContext.Session.GetString("UserType");
+
                 if (ModelState.IsValid)
                 {
                     using (var cliente = new HttpClient())

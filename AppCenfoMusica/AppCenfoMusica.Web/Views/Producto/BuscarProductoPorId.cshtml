@@ -24,6 +24,12 @@
 
     <br />
     <form asp-action="BuscarProductoPorID">
+
+        @Html.HiddenFor(model => model.Producto.CantidadBodega)
+        @Html.HiddenFor(model => model.Producto.TipoProducto)
+        @Html.HiddenFor(model => model.Producto.Nombre)
+        @Html.HiddenFor(model => model.Producto.PrecioUnitario)
+        @Html.HiddenFor(model => model.Producto.TipoProducto)
     <div class="card">
         <div class="card-header">
             <b>@Model.Producto.Nombre</b>
@@ -59,29 +65,37 @@
     </div>
     <br />
         @Html.HiddenFor(model => model.Producto.IdEntidad)
-        @Html.DisplayNameFor(model => model.CantidadXProducto)
-        <div>
-            @Html.TextBoxFor(model => model.CantidadXProducto, new { @class = "form-control" })
-            <br />
-            <input type="submit" value="Agregar al Carrito" class="btn btn-primary" />
-
-            @if (ViewBag.Mensaje != null)
+        @if (ViewBag.UserType == "Cliente")
+        {
+            @Html.DisplayNameFor(model => model.CantidadXProducto)
+            <div>
+                @Html.TextBoxFor(model => model.CantidadXProducto, new { @class = "form-control" })
+                <br />
+                <input type="submit" value="Agregar al Carrito" class="btn btn-primary" />
+            </div>
+        }
+        @if (ViewBag.Mensaje != null)
+        {
+            <div class="alert alert-success">@ViewBag.Mensaje</div>
+        }
+        else
+        {
+            if (ViewBag.MensajeError != null)
             {
-                <div class="alert alert-success">@ViewBag.Mensaje</div>
+                <div class="alert alert-success">@ViewBag.MensajeError</div>
             }
-            else
-            {
-                if (ViewBag.MensajeError != null)
-                {
-                    <div class="alert alert-success">@ViewBag.MensajeError</div>
-                }
-            }
-        </div>
+        }
     </form>
     <div class="btn-group">
         <a class="btn btn-outline-info" asp-action="ListarProductos">Regresar</a>
-        @Html.ActionLink("Editar", "ActualizarProducto", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-outline-info" })
-        <a class="btn btn-outline-info" href="#">Agregar al carrito</a>
+        @if (ViewBag.UserType == "Vendedor")
+        {
+            @Html.ActionLink("Editar", "ActualizarProducto", new { /* id = Model.PrimaryKey */ }, new { @class = "btn btn-outline-info" })
+        }
+@*        @if (ViewBag.UserType == "Cliente")
+        {
+            <a class="btn btn-outline-info" href="#">Agregar al carrito</a>
+        }*@
     </div>
 }
 else

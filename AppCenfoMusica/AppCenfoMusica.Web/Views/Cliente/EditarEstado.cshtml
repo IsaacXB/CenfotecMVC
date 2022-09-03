@@ -9,71 +9,73 @@
 
 <h4>Cliente</h4>
 <hr />
-@using (Html.BeginForm())
+@if (ViewBag.UserType == "Vendedor")
 {
-    if (ViewBag.TipoCliente != null)
+    @using (Html.BeginForm())
     {
-        <div class="alert alert-info">@ViewBag.TipoCliente</div>
+        if (ViewBag.TipoCliente != null)
+        {
+            <div class="alert alert-info">@ViewBag.TipoCliente</div>
 
-    }
-    if (ViewBag.Accion != null)
-    {
-        <div class="alert alert-success">@ViewBag.Accion</div>
-    }
+        }
+        if (ViewBag.Accion != null)
+        {
+            <div class="alert alert-success">@ViewBag.Accion</div>
+        }
 
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="EditarEstado">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                @Html.HiddenFor(model => model.IdEntidad)
-                @Html.HiddenFor(model => model.Nombre)
-                @Html.HiddenFor(model => model.Cedula)
-                @Html.HiddenFor(model => model.NombreUsuario)
-                @Html.HiddenFor(model => model.Contrasena)
-                @Html.HiddenFor(model => model.Sexo)
-                @Html.HiddenFor(model => model.FechaNacimiento)
-                @Html.HiddenFor(model => model.Email)
-                @Html.HiddenFor(model => model.Telefono)
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="EditarEstado">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @Html.HiddenFor(model => model.IdEntidad)
+                    @Html.HiddenFor(model => model.Nombre)
+                    @Html.HiddenFor(model => model.Cedula)
+                    @Html.HiddenFor(model => model.NombreUsuario)
+                    @Html.HiddenFor(model => model.Contrasena)
+                    @Html.HiddenFor(model => model.Sexo)
+                    @Html.HiddenFor(model => model.FechaNacimiento)
+                    @Html.HiddenFor(model => model.Email)
+                    @Html.HiddenFor(model => model.Telefono)
 
-                <span class="card">
-                    <div class="card-header">
-                        <div class="form-group">
-                            <label asp-for="Nombre" class="control-label"></label>
-                            <label class="disabled">@Model.Nombre</label>
-                            @*<span asp-validation-for="Nombre" class="text-danger"></span>*@
+                    <span class="card">
+                        <div class="card-header">
+                            <div class="form-group">
+                                <label asp-for="Nombre" class="control-label"></label>
+                                <label class="disabled">@Model.Nombre</label>
+                                @*<span asp-validation-for="Nombre" class="text-danger"></span>*@
+                            </div>
+
                         </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="Cedula" class="control-label"></label>
+                                <label class="disabled">@Model.Cedula</label>
+                                @*<span asp-validation-for="Cedula" class="text-danger"></span>*@
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="NombreUsuario" class="control-label"></label>
+                                <label class="disabledl">@Model.NombreUsuario</label>
+                                @*            <span asp-validation-for="NombreUsuario" class="text-danger"></span>*@
+                            </div>
 
+                        </div>
+                    </span>
+                    <div class="form-group">
+                        <label asp-for="Estado" class="control-label"></label>
+                        <input asp-for="Estado" class="form-control" />
+                        <span asp-validation-for="Estado" class="text-danger"></span>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label asp-for="Cedula" class="control-label"></label>
-                            <label class="disabled">@Model.Cedula</label>
-                            @*<span asp-validation-for="Cedula" class="text-danger"></span>*@
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="NombreUsuario" class="control-label"></label>
-                            <label class="disabledl">@Model.NombreUsuario</label>
-                            @*            <span asp-validation-for="NombreUsuario" class="text-danger"></span>*@
-                        </div>
-
+                    <div class="form-group">
+                        <input type="submit" value="EditarEstado" class="btn btn-primary" />
                     </div>
-                </span>
-                <div class="form-group">
-                    <label asp-for="Estado" class="control-label"></label>
-                    <input asp-for="Estado" class="form-control" />
-                    <span asp-validation-for="Estado" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="EditarEstado" class="btn btn-primary" />
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
+    }
+    <div>
+        <a asp-action="ListarClientes">Back to List</a>
     </div>
 }
-<div>
-    <a asp-action="ListarClientes">Back to List</a>
-</div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -35,7 +35,7 @@ namespace AppCenfoMusica.DTO
         [Display(Name = "Contraseña:")]
         [MinLength(5)]
         [MaxLength(8)]
-        //[ValidacionContraseña]
+        [ValidacionContraseña]
         public string Contrasena { get; set; }
 
         [Display(Name = "Estado del Vendedor:")]

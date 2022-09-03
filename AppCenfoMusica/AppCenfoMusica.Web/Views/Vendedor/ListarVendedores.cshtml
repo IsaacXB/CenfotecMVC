@@ -41,7 +41,7 @@
                     <div class="btn-group">
                         @Html.ActionLink("Editar Estado", "EditarEstado", new {  id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
                         @Html.ActionLink("Detalles", "BuscarVendedorPorID", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-primary" })
-                        @Html.ActionLink("Eliminar", "EliminarVendedor", (VendedorDTO)item, new { @class = "btn btn-outline-danger" })
+                        @Html.ActionLink("Eliminar", "EliminarVendedor", new { id=item.IdEntidad  }, new { @class = "btn btn-outline-danger" })
                     </div>
                 </td>
             </tr>

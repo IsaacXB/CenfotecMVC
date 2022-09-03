@@ -188,7 +188,7 @@ namespace AppCenfoMusica.Servicios.Controllers
         }
 
         //Get: api/Service/EliminarCliente
-        [HttpGet("EliminarCliente")]
+        [HttpPost("EliminarCliente")]
         public BaseDTO EliminarCliente(ClienteDTO clienteDTO)
         {
             var resultado = new ClienteLogica().EliminarCliente(clienteDTO);
@@ -318,7 +318,7 @@ namespace AppCenfoMusica.Servicios.Controllers
         }
 
         //Get: api/Service/EliminarVendedor
-        [HttpGet("EliminarVendedor")]
+        [HttpPost("EliminarVendedor")]
         public BaseDTO EliminarVendedor(VendedorDTO vendedorDTO)
         {
             var resultado = new VendedorLogica().EliminarVendedor(vendedorDTO);

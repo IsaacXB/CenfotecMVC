@@ -64,8 +64,11 @@
     <br />
     <div class="btn-group">
         <a class="btn btn-outline-info" asp-action="ListarClientes">Regresar</a>
-        @Html.ActionLink("Editar Estado", "EditarEstado", new {  id=Model.Cliente.IdEntidad }, new { @class = "btn btn-outline-primary" })
-        @Html.ActionLink("Editar Datos", "EditarDatos", new {  id=Model.Cliente.IdEntidad }, new { @class = "btn btn-outline-primary" })
+        @if (ViewBag.UserType == "Vendedor")
+        {
+            @Html.ActionLink("Editar Estado", "EditarEstado", new {  id=Model.Cliente.IdEntidad }, new { @class = "btn btn-outline-primary" })
+            @Html.ActionLink("Editar Datos", "EditarDatos", new {  id=Model.Cliente.IdEntidad }, new { @class = "btn btn-outline-primary" })
+        }
     </div>
 }
 else
